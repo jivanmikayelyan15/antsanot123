@@ -461,22 +461,22 @@ function initVideoQuestButton() {
         questButton.style.transform = 'translateX(-50%) scale(0.8)';
         
         // Also enable sound when quest button is clicked
-        const video = document.getElementById('backgroundVideo');
-        if (video && video.muted) {
-            try {
-                // Ensure video is playing before unmuting (mobile requirement)
-                if (video.paused) {
-                    await video.play();
-                }
-                video.muted = false;
-                if (video.paused) {
-                    await video.play();
-                }
-                console.log('Sound enabled via quest button');
-            } catch (error) {
-                console.log('Quest button sound enable error:', error);
-            }
-        }
+        // const video = document.getElementById('backgroundVideo');
+        // if (video && video.muted) {
+        //     try {
+        //         // Ensure video is playing before unmuting (mobile requirement)
+        //         if (video.paused) {
+        //             await video.play();
+        //         }
+        //         video.muted = false;
+        //         if (video.paused) {
+        //             await video.play();
+        //         }
+        //         console.log('Sound enabled via quest button');
+        //     } catch (error) {
+        //         console.log('Quest button sound enable error:', error);
+        //     }
+        // }
         
         // Create particle effect before showing quest
         createQuestParticles();
