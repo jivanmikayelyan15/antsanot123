@@ -2,9 +2,22 @@
 // Deploy this to Vercel, Netlify, or Cloudflare Workers
 
 export default async function handler(req, res) {
+    // Set CORS headers for all responses
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+
+    // Handle CORS preflight requests
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
     // Only allow POST requests
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+        res.status(405).json({ error: 'Method not allowed' });
+        return;
     }
 
     // Get environment variables
@@ -14,7 +27,8 @@ export default async function handler(req, res) {
     // Check if credentials are set
     if (!BOT_TOKEN || !CHANNEL_ID) {
         console.error('Telegram credentials not configured');
-        return res.status(500).json({ error: 'Server configuration error' });
+        res.status(500).json({ error: 'Server configuration error' });
+        return;
     }
 
     try {
@@ -22,7 +36,8 @@ export default async function handler(req, res) {
         const { message, eventType, ...eventData } = req.body;
 
         if (!message) {
-            return res.status(400).json({ error: 'Message is required' });
+            res.status(400).json({ error: 'Message is required' });
+            return;
         }
 
         // Send message to Telegram channel
@@ -44,24 +59,27 @@ export default async function handler(req, res) {
 
         if (!response.ok) {
             console.error('Telegram API error:', data);
-            return res.status(500).json({ 
+            res.status(500).json({ 
                 error: 'Failed to send message',
                 details: data.description 
             });
+            return;
         }
 
         // Success
-        return res.status(200).json({ 
+        res.status(200).json({ 
             success: true, 
             messageId: data.result.message_id 
         });
+        return;
 
     } catch (error) {
         console.error('Server error:', error);
-        return res.status(500).json({ 
+        res.status(500).json({ 
             error: 'Internal server error',
             message: error.message 
         });
+        return;
     }
 }
 

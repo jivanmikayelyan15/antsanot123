@@ -47,8 +47,7 @@ const ACHIEVEMENT_MESSAGES = [
 
 // Telegram Configuration
 // TODO: Replace with your serverless function URL (e.g., from Vercel, Netlify, etc.)
-const TELEGRAM_API_URL = 'https://your-serverless-function.vercel.app/api/telegram';
-// Example: 'https://newyear-quest-bot.vercel.app/api/telegram'
+const TELEGRAM_API_URL = 'https://antsanot123.vercel.app/api/telegram';
 
 // Quest game state
 let questGameState = {
