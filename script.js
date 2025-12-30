@@ -15,7 +15,7 @@ const QUEST_STEPS = [
         type: "search", 
         icon: "⭐", 
         text: "Գտիր թաքնված աստղը", 
-        hint: "Որոնիր էկրանի վերևում, կենտրոնում - կտեսնես փայլուն աստղ ⭐" 
+        hint: "Որոնիր էկրանի վերևում, կենտրոնում - կտեսնես փայլուն աստղը ⭐" 
     },
     { 
         type: "pattern", 
@@ -700,11 +700,11 @@ function createHiddenElements() {
             element.dataset.stepIndex = index;
             element.title = 'Կտտացրու ինձ!'; // Hint tooltip
             
-            // Make element start smaller and less visible for more challenge
-            element.style.fontSize = '35px';
-            element.style.opacity = '0';
-            element.style.top = '10%';
-            element.style.left = '45%';
+            // Position star at top center of screen - opacity will be controlled by CSS
+            element.style.fontSize = '70px';
+            // Don't set opacity inline - let CSS handle it
+            element.style.top = '8%';
+            element.style.left = '50%';
             element.style.transform = 'translateX(-50%)';
             
             // Add multiple event handlers to ensure click works

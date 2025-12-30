@@ -918,12 +918,15 @@ body.quest-search-mode * {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    max-height: 80vh;
-    overflow-y: auto;
+    max-height: 85vh;
+    overflow: visible;
     width: 100%;
     max-width: 550px;
-    padding: 0 20px;
+    padding: 0;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .quest-container::before {
@@ -992,23 +995,46 @@ body.quest-search-mode * {
 }
 
 .quest-card {
-    background: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-radius: 24px;
-    padding: 50px 45px;
+    padding: 40px 35px;
     box-shadow: 
         0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(255, 255, 255, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    min-width: 450px;
-    max-width: 550px;
+        0 0 30px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 80vh;
     animation: cardGlow 3s ease-in-out infinite;
     box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+.quest-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.quest-card::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.quest-card::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
+
+.quest-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.6);
 }
 
 .quest-card::before {
@@ -1077,19 +1103,20 @@ body.quest-search-mode * {
 }
 
 .quest-title {
-    font-size: 36px;
+    font-size: 28px;
     color: #ffffff;
     text-shadow: 
-        0 0 20px rgba(255, 255, 255, 1),
-        0 0 40px rgba(255, 255, 255, 0.8),
-        0 0 60px rgba(255, 255, 255, 0.5),
-        0 3px 6px rgba(0, 0, 0, 0.5);
-    margin-bottom: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
+        0 2px 8px rgba(0, 0, 0, 0.8),
+        0 4px 12px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.6),
+        0 0 30px rgba(255, 215, 0, 0.4);
+    margin-bottom: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
     animation: titlePulse 2s ease-in-out infinite;
     position: relative;
     font-family: 'Georgia', 'Times New Roman', serif;
+    line-height: 1.3;
 }
 
 .quest-title::after {
@@ -1135,14 +1162,13 @@ body.quest-search-mode * {
 }
 
 .quest-subtitle {
-    font-size: 17px;
+    font-size: 15px;
     color: #ffffff;
-    line-height: 1.7;
+    line-height: 1.6;
     text-shadow: 
-        0 0 12px rgba(255, 255, 255, 0.9),
-        0 0 25px rgba(255, 255, 255, 0.6),
-        0 2px 4px rgba(0, 0, 0, 0.4);
-    font-weight: 500;
+        0 2px 5px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(255, 215, 0, 0.5);
+    font-weight: 600;
     font-style: italic;
 }
 
@@ -1155,9 +1181,9 @@ body.quest-search-mode * {
     align-items: center;
     padding: 16px 20px;
     margin-bottom: 14px;
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     opacity: 0.85;
     transform: translateX(-20px);
@@ -1177,12 +1203,12 @@ body.quest-search-mode * {
 
 .quest-step.active {
     opacity: 1;
-    background: rgba(255, 255, 255, 0.55);
-    border-color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
     box-shadow: 
         0 6px 20px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(255, 255, 255, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        0 0 30px rgba(255, 255, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
     transform: translateX(5px) scale(1.02);
     animation: stepPulse 2s ease-in-out infinite;
 }
@@ -1224,15 +1250,21 @@ body.quest-search-mode * {
     font-size: 16px;
     color: #ffffff;
     text-shadow: 
-        0 0 12px rgba(255, 255, 255, 0.8),
-        0 0 20px rgba(255, 255, 255, 0.5),
-        0 2px 4px rgba(0, 0, 0, 0.4);
+        0 0 12px rgba(255, 255, 255, 0.9),
+        0 0 20px rgba(255, 255, 255, 0.6),
+        0 2px 4px rgba(0, 0, 0, 0.3);
     font-weight: 500;
+    line-height: 1.5;
 }
 
 .quest-step-main-text {
-    font-weight: 500;
-    margin-bottom: 4px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 17px;
+    text-shadow: 
+        0 0 15px rgba(255, 255, 255, 1),
+        0 0 25px rgba(255, 255, 255, 0.7),
+        0 2px 5px rgba(0, 0, 0, 0.4);
 }
 
 .quest-step-hint {
@@ -1240,9 +1272,11 @@ body.quest-search-mode * {
     color: rgba(255, 255, 255, 0.9);
     font-style: italic;
     text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.7),
-        0 0 15px rgba(255, 255, 255, 0.4),
-        0 1px 2px rgba(0, 0, 0, 0.3);
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 15px rgba(255, 255, 255, 0.5),
+        0 1px 3px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
+    margin-top: 4px;
 }
 
 .quest-step-check {
@@ -1309,7 +1343,7 @@ body.quest-search-mode * {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 15;
+    z-index: 45;
     overflow: hidden;
 }
 
@@ -1317,7 +1351,7 @@ body.quest-search-mode * {
     position: absolute;
     cursor: pointer;
     font-size: 50px;
-    opacity: 0;
+    opacity: 0.1;
     transition: opacity 0.5s ease, filter 0.3s ease, transform 0.3s ease;
     pointer-events: all !important;
     filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9));
@@ -1329,20 +1363,21 @@ body.quest-search-mode * {
 }
 
 .hidden-element.visible {
-    opacity: 0.9 !important;
-    animation: pulseGlow 2s ease-in-out infinite, float 3s ease-in-out infinite, elementAppear 1s ease-out forwards;
-    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1)) drop-shadow(0 0 35px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 50px rgba(255, 215, 0, 0.6));
+    opacity: 0.5 !important;
+    animation: pulseGlow 1.5s ease-in-out infinite, float 3s ease-in-out infinite, elementAppear 1s ease-out forwards;
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 70px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 90px rgba(255, 215, 0, 0.8));
     display: block !important;
     visibility: visible !important;
-    font-size: 50px !important;
+    font-size: 70px !important;
     transition: opacity 0.5s ease, font-size 0.5s ease;
-    z-index: 30 !important;
+    z-index: 50 !important;
     position: fixed !important;
 }
 
 .hidden-element.visible:hover {
     opacity: 1 !important;
-    font-size: 50px !important;
+    font-size: 75px !important;
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 70px rgba(255, 215, 0, 0.9)) !important;
 }
 
 @keyframes elementAppear {
@@ -1351,19 +1386,19 @@ body.quest-search-mode * {
         transform: scale(0.5);
     }
     50% {
-        opacity: 0.5;
+        opacity: 0.4;
         transform: scale(1.1);
     }
     100% {
-        opacity: 0.7;
+        opacity: 0.5;
         transform: scale(1);
     }
 }
 
 .hidden-element:hover {
-    transform: scale(1.4) !important;
+    transform: scale(1.3) !important;
     opacity: 1 !important;
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 40px rgba(255, 215, 0, 1)) !important;
+    filter: drop-shadow(0 0 35px rgba(255, 215, 0, 1)) drop-shadow(0 0 55px rgba(255, 215, 0, 1)) drop-shadow(0 0 75px rgba(255, 215, 0, 0.9)) !important;
     animation: pulseGlow 0.8s ease-in-out infinite, float 3s ease-in-out infinite !important;
 }
 
@@ -1402,10 +1437,10 @@ body.quest-search-mode * {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.5) 0%, rgba(255, 215, 0, 0.3) 40%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, rgba(255, 215, 0, 0.25) 40%, transparent 70%);
     animation: spotlightPulse 1.5s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
@@ -1426,26 +1461,27 @@ body.quest-search-mode * {
 .hidden-element.visible::before {
     content: '👆 Կտտացրու';
     position: absolute;
-    top: -60px;
+    top: -70px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 18px;
-    color: #ffd700;
+    font-size: 19px;
+    color: #ffffff;
     white-space: nowrap;
     text-shadow: 
-        0 0 15px rgba(255, 215, 0, 1),
-        0 0 25px rgba(255, 215, 0, 0.8),
-        0 2px 4px rgba(0, 0, 0, 0.5);
+        0 0 20px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 0.9),
+        0 2px 6px rgba(0, 0, 0, 0.6);
     animation: bounceHint 1s ease-in-out infinite;
     pointer-events: none;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 8px 15px;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 215, 0, 0.6);
-    z-index: 31;
-    font-weight: 600;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 10px 18px;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    z-index: 51;
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes bounceHint {
@@ -1974,27 +2010,44 @@ body.quest-search-mode * {
     }
     
     .quest-container {
-        max-height: 90vh;
-        padding: 10px;
+        max-height: 90vh !important;
+        padding: 8px !important;
+        width: 92% !important;
+        max-width: 92% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        overflow: visible !important;
     }
     
     .quest-container::before {
         width: 100vw;
         height: 100vh;
+        pointer-events: none !important;
     }
     
     .quest-card {
-        min-width: 90%;
-        max-width: 90%;
-        padding: 35px 25px;
-        border-radius: 20px;
-        margin: 0 auto;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 20px 16px !important;
+        border-radius: 16px !important;
+        margin: 0 auto !important;
+        max-height: 82vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        background: linear-gradient(135deg, 
+            rgba(220, 38, 38, 0.9) 0%,
+            rgba(185, 28, 28, 0.95) 50%,
+            rgba(220, 38, 38, 0.9) 100%) !important;
     }
     
     .quest-title {
-        font-size: 26px;
-        letter-spacing: 1.5px;
-        margin-bottom: 10px;
+        font-size: 22px !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 8px !important;
+        line-height: 1.3 !important;
+        font-weight: 800 !important;
     }
     
     .quest-title::after,
@@ -2003,26 +2056,38 @@ body.quest-search-mode * {
     }
     
     .quest-subtitle {
-        font-size: 15px;
-        line-height: 1.5;
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        font-weight: 600 !important;
     }
     
     .quest-step {
-        padding: 14px 16px;
-        margin-bottom: 12px;
-        border-radius: 14px;
+        padding: 12px 14px !important;
+        margin-bottom: 10px !important;
+        border-radius: 12px !important;
     }
     
     .quest-step-text {
-        font-size: 15px;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        line-height: 1.5 !important;
     }
     
     .quest-step-main-text {
-        font-size: 14px;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        line-height: 1.5 !important;
     }
     
     .quest-step-hint {
-        font-size: 12px;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        line-height: 1.5 !important;
+    }
+    
+    .quest-step-icon {
+        font-size: 20px !important;
+        margin-right: 10px !important;
     }
     
     .quest-progress {
@@ -2138,7 +2203,8 @@ body.quest-search-mode * {
 }
 
 /* iPhone and Small Devices (430px and down) - iPhone 16 Pro, 15 Pro, etc. */
-@media (max-width: 430px) {
+/* Complete responsive redesign - warm red/gold theme */
+@media screen and (max-width: 430px) {
     .sound-button {
         top: 8px;
         right: 8px;
@@ -2177,104 +2243,145 @@ body.quest-search-mode * {
     }
     
     .quest-container {
-        padding: 10px;
-        width: 95%;
-        max-width: 95%;
-        left: 50%;
-        right: auto;
-        transform: translateX(-50%) translateY(-50%);
-        max-height: 90vh;
-        overflow-y: auto;
+        padding: 8px !important;
+        width: 88% !important;
+        max-width: 88% !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+        max-height: 85vh !important;
+        overflow: visible !important;
+        z-index: 20 !important;
+    }
+    
+    .quest-container::before {
+        pointer-events: none !important;
     }
     
     .quest-container.visible {
-        transform: translateX(-50%) translateY(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1) !important;
     }
     
     .quest-card {
-        min-width: 0;
-        max-width: 100%;
-        width: 100%;
-        padding: 20px 18px;
-        border-radius: 18px;
-        margin: 0 auto;
-        box-sizing: border-box;
-        max-height: 85vh;
-        overflow-y: auto;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 20px 16px !important;
+        border-radius: 20px !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+        max-height: 75vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        backdrop-filter: blur(25px) !important;
+        -webkit-backdrop-filter: blur(25px) !important;
+        border: 2px solid rgba(255, 255, 255, 0.35) !important;
+        box-shadow: 
+            0 20px 60px rgba(0, 0, 0, 0.4),
+            0 0 30px rgba(255, 255, 255, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
     }
     
     .quest-title {
-        font-size: 24px;
-        letter-spacing: 1px;
-        margin-bottom: 8px;
-        line-height: 1.3;
+        font-size: 21px !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.3 !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        text-shadow: 
+            0 0 20px rgba(255, 255, 255, 1),
+            0 0 40px rgba(255, 255, 255, 0.8),
+            0 0 60px rgba(255, 255, 255, 0.5),
+            0 3px 6px rgba(0, 0, 0, 0.4) !important;
     }
     
     .quest-subtitle {
-        font-size: 15px;
-        line-height: 1.5;
-        margin-bottom: 15px;
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 12px !important;
+        font-weight: 500 !important;
+        color: #ffffff !important;
+        text-shadow: 
+            0 0 12px rgba(255, 255, 255, 0.9),
+            0 0 25px rgba(255, 255, 255, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.3) !important;
     }
     
     .quest-step {
-        padding: 14px 16px;
-        margin-bottom: 12px;
-        border-radius: 14px;
+        padding: 12px 13px !important;
+        margin-bottom: 9px !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    }
+    
+    .quest-step.active {
+        background: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(255, 255, 255, 0.4) !important;
+    }
+    
+    .quest-step.completed {
+        background: rgba(255, 255, 255, 0.12) !important;
     }
     
     .quest-step-text {
-        font-size: 16px;
-        line-height: 1.5;
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+        color: #ffffff !important;
         text-shadow: 
-            0 0 15px rgba(255, 255, 255, 1),
-            0 0 25px rgba(255, 255, 255, 0.8),
-            0 2px 4px rgba(0, 0, 0, 0.5);
-        font-weight: 500;
+            0 0 12px rgba(255, 255, 255, 0.9),
+            0 0 20px rgba(255, 255, 255, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        font-weight: 500 !important;
     }
     
     .quest-step-main-text {
-        font-size: 15px;
-        line-height: 1.5;
-        font-weight: 600;
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
         text-shadow: 
             0 0 15px rgba(255, 255, 255, 1),
-            0 0 25px rgba(255, 255, 255, 0.8),
-            0 2px 4px rgba(0, 0, 0, 0.5);
+            0 0 25px rgba(255, 255, 255, 0.7),
+            0 2px 5px rgba(0, 0, 0, 0.4) !important;
     }
     
     .quest-step-hint {
-        font-size: 13px;
-        line-height: 1.6;
-        margin-top: 6px;
+        font-size: 12px !important;
+        line-height: 1.6 !important;
+        margin-top: 5px !important;
+        color: rgba(255, 255, 255, 0.9) !important;
         text-shadow: 
-            0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 20px rgba(255, 255, 255, 0.7),
-            0 1px 3px rgba(0, 0, 0, 0.4);
+            0 0 10px rgba(255, 255, 255, 0.8),
+            0 0 15px rgba(255, 255, 255, 0.5),
+            0 1px 3px rgba(0, 0, 0, 0.3) !important;
+        font-weight: 500 !important;
     }
     
-    .quest-title {
-        text-shadow: 
-            0 0 20px rgba(255, 255, 255, 1),
-            0 0 30px rgba(255, 255, 255, 0.9),
-            0 2px 6px rgba(0, 0, 0, 0.5);
-    }
-    
-    .quest-subtitle {
-        text-shadow: 
-            0 0 15px rgba(255, 255, 255, 0.9),
-            0 0 25px rgba(255, 255, 255, 0.7),
-            0 1px 4px rgba(0, 0, 0, 0.4);
+    .quest-step-icon {
+        font-size: 19px !important;
+        margin-right: 9px !important;
+        width: 24px !important;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7)) !important;
     }
     
     .quest-progress {
-        margin-top: 18px;
-        gap: 10px;
+        margin-top: 16px !important;
+        gap: 10px !important;
     }
     
     .quest-progress-text {
-        font-size: 15px;
-        min-width: 40px;
-        font-weight: 600;
+        font-size: 15px !important;
+        min-width: 38px !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        text-shadow: 
+            0 0 15px rgba(255, 255, 255, 0.9),
+            0 0 25px rgba(255, 255, 255, 0.6),
+            0 2px 4px rgba(0, 0, 0, 0.3) !important;
     }
     
     .quest-minigame {
@@ -2312,24 +2419,30 @@ body.quest-search-mode * {
         line-height: 1.5;
     }
     
-    /* Quest Star - Better visibility for iPhone */
+    /* Quest Star - Top of screen, slightly transparent, easy to find */
     .hidden-element {
-        font-size: 70px !important;
+        font-size: 80px !important;
     }
     
     .hidden-element.visible {
-        font-size: 90px !important;
-        opacity: 1 !important;
+        font-size: 95px !important;
+        opacity: 0.5 !important;
         filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1)) 
                 drop-shadow(0 0 60px rgba(255, 215, 0, 1)) 
-                drop-shadow(0 0 90px rgba(255, 215, 0, 0.9)) 
-                drop-shadow(0 0 120px rgba(255, 215, 0, 0.8)) !important;
-        z-index: 30 !important;
-        animation: pulseGlow 0.8s ease-in-out infinite, float 2s ease-in-out infinite, elementAppear 1s ease-out forwards !important;
+                drop-shadow(0 0 90px rgba(255, 215, 0, 1)) 
+                drop-shadow(0 0 120px rgba(255, 215, 0, 0.9)) !important;
+        z-index: 50 !important;
+        position: fixed !important;
+        pointer-events: all !important;
+        animation: pulseGlow 1.2s ease-in-out infinite, float 2.5s ease-in-out infinite, elementAppear 1s ease-out forwards !important;
+        top: 8% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
     }
     
     .hidden-element.visible:hover {
         font-size: 100px !important;
+        opacity: 1 !important;
     }
     
     .hidden-element.visible::after {
@@ -2338,11 +2451,17 @@ body.quest-search-mode * {
     }
     
     .hidden-element.visible::before {
-        font-size: 18px !important;
+        font-size: 17px !important;
         top: -75px !important;
-        padding: 12px 20px !important;
+        padding: 12px 18px !important;
         white-space: nowrap;
-        font-weight: 600;
+        font-weight: 700;
+        z-index: 51 !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        backdrop-filter: blur(12px) !important;
+        border-radius: 22px !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
     }
     
     .pattern-btn {
