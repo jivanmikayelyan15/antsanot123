@@ -73,6 +73,10 @@ let telegramTracking = {
     questButtonClicked: false,
     questStepsCompleted: [],
     allQuestsCompleted: false,
+    messageOpened: false,
+    messageOpenTime: null,
+    scrollEvents: [],
+    maxScrollPercentage: 0,
     userIP: null,
     userAgent: navigator.userAgent,
     screenSize: `${window.innerWidth}x${window.innerHeight}`
@@ -84,13 +88,84 @@ document.addEventListener('DOMContentLoaded', () => {
     initSoundButton();
     initVideoQuestButton();
     initSnow();
+    initPageUnloadTracking();
+    trackMessageOpen();
     sendTelegramNotification('page_load');
 });
 
+// Track scroll in message container
+function initMessageScrollTracking() {
+    const messageContainer = document.getElementById('messageContainer');
+    if (!messageContainer) return;
+
+    let scrollTimeout;
+    
+    messageContainer.addEventListener('scroll', () => {
+        const scrollTop = messageContainer.scrollTop;
+        const scrollHeight = messageContainer.scrollHeight;
+        const clientHeight = messageContainer.clientHeight;
+        const scrollPercentage = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100);
+        
+        // Update max scroll percentage
+        if (scrollPercentage > telegramTracking.maxScrollPercentage) {
+            telegramTracking.maxScrollPercentage = scrollPercentage;
+        }
+        
+        // Track scroll events (throttled)
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            telegramTracking.scrollEvents.push({
+                percentage: scrollPercentage,
+                timestamp: Date.now()
+            });
+        }, 500); // Track every 500ms
+    });
+}
+
+// Track when message container becomes visible
+function trackMessageOpen() {
+    const messageContainer = document.getElementById('messageContainer');
+    if (!messageContainer) return;
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                if (messageContainer.classList.contains('visible') && !telegramTracking.messageOpened) {
+                    telegramTracking.messageOpened = true;
+                    telegramTracking.messageOpenTime = Date.now();
+                    sendTelegramNotification('message_opened');
+                    initMessageScrollTracking();
+                }
+            }
+        });
+    });
+
+    observer.observe(messageContainer, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+}
+
 // Track time spent and send notification when user leaves
-window.addEventListener('beforeunload', () => {
-    sendTelegramNotification('page_unload');
-});
+function initPageUnloadTracking() {
+    // Use visibilitychange for better tracking (works when tab is hidden/closed)
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+            // User switched tab or closed browser
+            sendTelegramNotification('page_unload');
+        }
+    });
+
+    // Also track beforeunload as backup
+    window.addEventListener('beforeunload', () => {
+        sendTelegramNotification('page_unload');
+    });
+    
+    // Track page focus/blur
+    window.addEventListener('blur', () => {
+        // User switched away from tab
+    });
+}
 
 // Initialize video background
 function initVideo() {
@@ -1017,21 +1092,72 @@ async function sendTelegramNotification(eventType, additionalData = {}) {
                 eventData.totalTimeFormatted = `${minutes} րոպե ${seconds} վայրկյան`;
                 break;
 
+            case 'message_opened':
+                const timeToMessage = telegramTracking.messageOpenTime 
+                    ? Math.floor((telegramTracking.messageOpenTime - telegramTracking.pageLoadTime) / 1000)
+                    : 0;
+                const msgMinutes = Math.floor(timeToMessage / 60);
+                const msgSeconds = timeToMessage % 60;
+                message = `📖 Հաղորդագրությունը բացված\n\n`;
+                message += `⏱️ Քվեստից մինչև հաղորդագրություն: ${msgMinutes} րոպե ${msgSeconds} վայրկյան\n`;
+                message += `⏰ Ժամանակ: ${new Date().toLocaleString('hy-AM')}`;
+                eventData.timeToMessageSeconds = timeToMessage;
+                eventData.timeToMessageFormatted = `${msgMinutes} րոպե ${msgSeconds} վայրկյան`;
+                break;
+
             case 'page_unload':
                 if (timeSpent !== null) {
                     const minutes = Math.floor(timeSpent / 60);
                     const seconds = timeSpent % 60;
+                    
+                    // Calculate time spent reading message
+                    let messageReadTime = 0;
+                    let messageReadTimeFormatted = '0 վայրկյան';
+                    if (telegramTracking.messageOpenTime) {
+                        messageReadTime = Math.floor((Date.now() - telegramTracking.messageOpenTime) / 1000);
+                        const readMinutes = Math.floor(messageReadTime / 60);
+                        const readSeconds = messageReadTime % 60;
+                        messageReadTimeFormatted = `${readMinutes} րոպե ${readSeconds} վայրկյան`;
+                    }
+                    
+                    // Determine if user read the message
+                    const readPercentage = telegramTracking.maxScrollPercentage;
+                    let readStatus = 'Ոչ';
+                    if (readPercentage >= 80) {
+                        readStatus = 'Ամբողջությամբ կարդացված ✅';
+                    } else if (readPercentage >= 50) {
+                        readStatus = 'Մասամբ կարդացված 📖';
+                    } else if (readPercentage > 0) {
+                        readStatus = 'Սկսել է կարդալ 📄';
+                    } else if (telegramTracking.messageOpened) {
+                        readStatus = 'Բացված, բայց չի կարդացել ❌';
+                    }
+                    
                     message = `👋 Օգտատերը լքեց կայքը\n\n`;
                     message += `⏱️ Կայքում անցկացրած ժամանակ: ${minutes} րոպե ${seconds} վայրկյան\n`;
                     message += `🎁 Քվեստի կոճակ սեղմված: ${telegramTracking.questButtonClicked ? 'Այո' : 'Ոչ'}\n`;
                     message += `✅ Ավարտված քայլեր: ${telegramTracking.questStepsCompleted.length}/${QUEST_STEPS.length}\n`;
                     message += `🎉 Բոլոր քվեստները ավարտված: ${telegramTracking.allQuestsCompleted ? 'Այո' : 'Ոչ'}\n`;
+                    message += `📖 Հաղորդագրությունը բացված: ${telegramTracking.messageOpened ? 'Այո' : 'Ոչ'}\n`;
+                    
+                    if (telegramTracking.messageOpened) {
+                        message += `📚 Կարդալու ժամանակ: ${messageReadTimeFormatted}\n`;
+                        message += `📊 Կարդալու տոկոս: ${readPercentage}%\n`;
+                        message += `📝 Կարդալու կարգավիճակ: ${readStatus}\n`;
+                    }
+                    
                     message += `⏰ Ժամանակ: ${new Date().toLocaleString('hy-AM')}`;
+                    
                     eventData.timeSpentSeconds = timeSpent;
                     eventData.timeSpentFormatted = `${minutes} րոպե ${seconds} վայրկյան`;
                     eventData.questButtonClicked = telegramTracking.questButtonClicked;
                     eventData.questStepsCompleted = telegramTracking.questStepsCompleted.length;
                     eventData.allQuestsCompleted = telegramTracking.allQuestsCompleted;
+                    eventData.messageOpened = telegramTracking.messageOpened;
+                    eventData.messageReadTimeSeconds = messageReadTime;
+                    eventData.messageReadTimeFormatted = messageReadTimeFormatted;
+                    eventData.scrollPercentage = readPercentage;
+                    eventData.readStatus = readStatus;
                 }
                 break;
 

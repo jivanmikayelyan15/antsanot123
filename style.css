@@ -623,11 +623,35 @@ body.quest-search-mode * {
 /* Message Container */
 .message-container {
     max-width: 700px;
+    max-height: 85vh;
     padding: 20px;
     text-align: center;
     opacity: 0;
     transform: translateY(30px) scale(0.95);
     transition: opacity 1s ease, transform 1s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 215, 0, 0.5) transparent;
+}
+
+/* Custom scrollbar for message container */
+.message-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.message-container::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.message-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.5);
+    border-radius: 10px;
+}
+
+.message-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 215, 0, 0.7);
 }
 
 .message-container.visible {
