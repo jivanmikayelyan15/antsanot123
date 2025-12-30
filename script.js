@@ -211,11 +211,11 @@ function initVideo() {
     const markInteraction = () => {
         userHasInteracted = true;
     };
-    
+    video.muted = true;
     // Try to play video - start muted for autoplay compatibility
     const playVideo = () => {
         // Start with muted for autoplay (browsers allow muted autoplay)
-        video.muted = true;
+       
         const playPromise = video.play();
         
         if (playPromise !== undefined) {
@@ -272,11 +272,11 @@ function initVideo() {
             playVideo();
         } else {
             // Wait for video to load - use canplaythrough for better reliability
-            video.addEventListener('canplaythrough', playVideo, { once: true });
+            // video.addEventListener('canplaythrough', playVideo, { once: true });
             // Fallback to loadeddata if canplaythrough doesn't fire
             video.addEventListener('loadeddata', () => {
                 if (video.paused) {
-                    playVideo();
+                    // playVideo();
                 }
             }, { once: true });
         }
@@ -500,21 +500,21 @@ function initVideoQuestButton() {
         questButton.style.transform = 'translateX(-50%) scale(0.8)';
         
         // Also enable sound when quest button is clicked
-        const video = document.getElementById('backgroundVideo');
-        if (video && video.muted) {
-            try {
-                if (video.paused) {
-                    await video.play();
-                }
-                video.muted = false;
-                if (video.paused) {
-                    await video.play();
-                }
-                console.log('Sound enabled via quest button (touch)');
-            } catch (error) {
-                console.log('Quest button sound enable error (touch):', error);
-            }
-        }
+        // const video = document.getElementById('backgroundVideo');
+        // if (video && video.muted) {
+        //     try {
+        //         if (video.paused) {
+        //             await video.play();
+        //         }
+        //         video.muted = false;
+        //         if (video.paused) {
+        //             await video.play();
+        //         }
+        //         console.log('Sound enabled via quest button (touch)');
+        //     } catch (error) {
+        //         console.log('Quest button sound enable error (touch):', error);
+        //     }
+        // }
         
         // Create particle effect before showing quest
         createQuestParticles();
