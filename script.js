@@ -592,8 +592,26 @@ function initQuestSystem() {
         questStepsContainer.appendChild(stepElement);
     });
     
+    // Hide all minigames first
+    hideAllMinigames();
+    
     // Show quest container
     questContainer.classList.add('visible');
+    
+    // Prevent auto-scroll - ensure quest card starts at top
+    const questCard = questContainer.querySelector('.quest-card');
+    if (questCard) {
+        questCard.scrollTop = 0;
+        // Prevent focus from causing scroll
+        questCard.addEventListener('focus', (e) => {
+            e.preventDefault();
+        }, true);
+        // Prevent any child elements from causing scroll
+        questCard.addEventListener('focusin', (e) => {
+            e.preventDefault();
+            questCard.scrollTop = 0;
+        }, true);
+    }
     
     // Activate first step
     activateQuestStep(0);
@@ -624,10 +642,14 @@ function activateQuestStep(stepIndex) {
         existingArrow.remove();
     }
     
+    // Hide all minigames first
+    hideAllMinigames();
+    
     // Handle different quest types
     if (questStep.type === 'search') {
         // Quest 1: Search for hidden star
         document.body.classList.add('quest-search-mode');
+        showQuestContainer();
         
         if (questState.hiddenElements[stepIndex]) {
             const element = questState.hiddenElements[stepIndex];
@@ -637,14 +659,20 @@ function activateQuestStep(stepIndex) {
     } else if (questStep.type === 'pattern') {
         // Quest 2: Pattern matching
         document.body.classList.remove('quest-search-mode');
+        hideAllMinigames();
+        hideQuestContainer();
         initPatternGame();
     } else if (questStep.type === 'memory') {
         // Quest 3: Memory game
         document.body.classList.remove('quest-search-mode');
+        hideAllMinigames();
+        hideQuestContainer();
         initMemoryGame();
     } else if (questStep.type === 'counting') {
         // Quest 4: Counting challenge
         document.body.classList.remove('quest-search-mode');
+        hideAllMinigames();
+        hideQuestContainer();
         initCountingGame();
     }
     
@@ -700,13 +728,7 @@ function createHiddenElements() {
             element.dataset.stepIndex = index;
             element.title = 'Կտտացրու ինձ!'; // Hint tooltip
             
-            // Position star at top center of screen - opacity will be controlled by CSS
-            element.style.fontSize = '70px';
-            // Don't set opacity inline - let CSS handle it
-            element.style.top = '8%';
-            element.style.left = '50%';
-            element.style.transform = 'translateX(-50%)';
-            
+            // Position and styling handled by CSS - no inline styles
             // Add multiple event handlers to ensure click works
             element.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -723,11 +745,6 @@ function createHiddenElements() {
                 e.preventDefault();
                 console.log(`Element ${index} touched!`);
                 completeQuestStep(index);
-            });
-            
-            // Add mouse enter for better feedback
-            element.addEventListener('mouseenter', () => {
-                element.style.cursor = 'pointer';
             });
             
             container.appendChild(element);
@@ -939,10 +956,26 @@ function startTypewriterEffect() {
     const messageMain = document.getElementById('messageMain');
     const messageAdditional = document.getElementById('messageAdditional');
     const messageSignature = document.getElementById('messageSignature');
+    const messageContainer = document.getElementById('messageContainer');
+    
+    // Start scroll at top
+    if (messageContainer) {
+        messageContainer.scrollTop = 0;
+    }
     
     // Start with main message
     typeText(messageMain, CONGRATULATION_MESSAGE, () => {
         messageMain.classList.add('complete');
+        
+        // Scroll to show additional message area
+        if (messageContainer) {
+            setTimeout(() => {
+                messageContainer.scrollTo({
+                    top: messageContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
         
         // After main message, show additional message if provided
         if (ADDITIONAL_MESSAGE && ADDITIONAL_MESSAGE.trim() !== '') {
@@ -951,12 +984,32 @@ function startTypewriterEffect() {
                 typeText(messageAdditional, ADDITIONAL_MESSAGE, () => {
                     messageAdditional.classList.add('complete');
                     
+                    // Scroll to show signature area
+                    if (messageContainer) {
+                        setTimeout(() => {
+                            messageContainer.scrollTo({
+                                top: messageContainer.scrollHeight,
+                                behavior: 'smooth'
+                            });
+                        }, 100);
+                    }
+                    
                     // After additional message, show signature if provided
                     if (SIGNATURE_MESSAGE && SIGNATURE_MESSAGE.trim() !== '') {
                         setTimeout(() => {
                             messageSignature.classList.add('visible');
                             typeText(messageSignature, SIGNATURE_MESSAGE, () => {
                                 messageSignature.classList.add('complete');
+                                
+                                // Final scroll to bottom
+                                if (messageContainer) {
+                                    setTimeout(() => {
+                                        messageContainer.scrollTo({
+                                            top: messageContainer.scrollHeight,
+                                            behavior: 'smooth'
+                                        });
+                                    }, 100);
+                                }
                             });
                         }, 500);
                     }
@@ -968,6 +1021,16 @@ function startTypewriterEffect() {
                 messageSignature.classList.add('visible');
                 typeText(messageSignature, SIGNATURE_MESSAGE, () => {
                     messageSignature.classList.add('complete');
+                    
+                    // Final scroll to bottom
+                    if (messageContainer) {
+                        setTimeout(() => {
+                            messageContainer.scrollTo({
+                                top: messageContainer.scrollHeight,
+                                behavior: 'smooth'
+                            });
+                        }, 100);
+                    }
                 });
             }, 800);
         }
@@ -980,6 +1043,25 @@ function typeText(element, text, onComplete) {
     element.textContent = '';
     element.style.whiteSpace = 'pre-line'; // Allow line breaks
     
+    // Get message container for auto-scrolling
+    const messageContainer = document.getElementById('messageContainer');
+    
+    // Auto-scroll function
+    function autoScroll() {
+        if (messageContainer) {
+            // Scroll to bottom smoothly - scroll the container itself
+            const scrollHeight = messageContainer.scrollHeight;
+            const clientHeight = messageContainer.clientHeight;
+            const maxScroll = scrollHeight - clientHeight;
+            
+            // Smooth scroll to bottom
+            messageContainer.scrollTo({
+                top: maxScroll,
+                behavior: 'smooth'
+            });
+        }
+    }
+    
     function typeCharacter() {
         if (index < text.length) {
             // Handle emoji and special characters
@@ -987,10 +1069,18 @@ function typeText(element, text, onComplete) {
             element.textContent += char;
             index++;
             
+            // Auto-scroll every few characters or on line breaks
+            if (char === '\n' || index % 10 === 0) {
+                // Small delay to let DOM update
+                setTimeout(autoScroll, 10);
+            }
+            
             // Variable delay for more natural typing
             let delay;
             if (char === '\n') {
                 delay = 200; // Longer pause for line breaks
+                // Scroll after line break
+                setTimeout(autoScroll, 50);
             } else if (char === ' ') {
                 delay = 100;
             } else {
@@ -998,7 +1088,9 @@ function typeText(element, text, onComplete) {
             }
             setTimeout(typeCharacter, delay);
         } else {
-            // Typing complete
+            // Typing complete - scroll to bottom one final time
+            setTimeout(autoScroll, 100);
+            
             if (onComplete) {
                 onComplete();
             }
@@ -1188,6 +1280,39 @@ async function sendTelegramNotification(eventType, additionalData = {}) {
 }
 
 // ========== QUEST GAME FUNCTIONS ==========
+
+function hideAllMinigames() {
+    const minigames = ['questPatternGame', 'questMemoryGame', 'questCountingGame'];
+    minigames.forEach(gameId => {
+        const game = document.getElementById(gameId);
+        if (game) {
+            game.classList.remove('visible');
+        }
+    });
+}
+
+function hideMinigame(gameId) {
+    const game = document.getElementById(gameId);
+    if (game) {
+        game.classList.remove('visible');
+    }
+    // Show quest container again when minigame is hidden
+    showQuestContainer();
+}
+
+function hideQuestContainer() {
+    const questContainer = document.getElementById('questContainer');
+    if (questContainer) {
+        questContainer.classList.remove('visible');
+    }
+}
+
+function showQuestContainer() {
+    const questContainer = document.getElementById('questContainer');
+    if (questContainer) {
+        questContainer.classList.add('visible');
+    }
+}
 
 // Quest 2: Pattern Matching Game
 function initPatternGame() {
@@ -1424,10 +1549,4 @@ function initCountingGame() {
     gameContainer.classList.add('visible');
 }
 
-function hideMinigame(gameId) {
-    const game = document.getElementById(gameId);
-    if (game) {
-        game.classList.remove('visible');
-    }
-}
 

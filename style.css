@@ -1,38 +1,30 @@
+/* ============================================
+   RESET & BASE
+   ============================================ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html {
+html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
     position: fixed;
-}
-
-body {
     font-family: 'Georgia', 'Times New Roman', serif;
-    overflow: hidden;
-    height: 100vh;
-    width: 100vw;
-    min-height: 100vh;
-    min-width: 100vw;
-    background: linear-gradient(180deg, #0a1929 0%, #1a2f4a 50%, #2d4a6b 100%);
-    position: relative;
-    margin: 0;
-    padding: 0;
+    background: #000;
 }
 
-/* Video Container */
+/* ============================================
+   VIDEO BACKGROUND
+   ============================================ */
 .video-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    min-width: 100%;
-    min-height: 100%;
     z-index: 0;
     overflow: hidden;
     background: #000;
@@ -49,133 +41,27 @@ body {
     min-height: 100%;
     object-fit: cover;
     object-position: center;
-    z-index: 1;
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
 }
 
-/* Prevent video controls and interactions */
 .background-video::-webkit-media-controls {
     display: none !important;
 }
 
-.background-video::-webkit-media-controls-enclosure {
-    display: none !important;
-}
-
-/* Ensure video covers full screen on all devices */
-@media (orientation: portrait) {
-    .video-container {
-        width: 100vw;
-        height: 100vh;
-    }
-    
-    .background-video {
-        width: 100vw;
-        height: 100vh;
-        min-width: 100vw;
-        min-height: 100vh;
-        object-fit: cover;
-        object-position: center;
-    }
-}
-
-@media (orientation: landscape) {
-    .video-container {
-        width: 100vw;
-        height: 100vh;
-    }
-    
-    .background-video {
-        width: 100vw;
-        height: 100vh;
-        min-width: 100vw;
-        min-height: 100vh;
-        object-fit: cover;
-        object-position: center;
-    }
-}
-
-/* Mobile Video Optimization */
-@media (max-width: 768px) {
-    .video-container {
-        width: 100vw !important;
-        height: 100vh !important;
-        min-width: 100vw !important;
-        min-height: 100vh !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-    
-    .background-video {
-        width: 100vw !important;
-        height: 100vh !important;
-        min-width: 100vw !important;
-        min-height: 100vh !important;
-        object-fit: cover;
-        object-position: center;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}
-
-/* Small Mobile Devices */
-@media (max-width: 480px) {
-    .video-container {
-        width: 100vw !important;
-        height: 100vh !important;
-        min-width: 100vw !important;
-        min-height: 100vh !important;
-    }
-    
-    .background-video {
-        width: 100vw !important;
-        height: 100vh !important;
-        min-width: 100vw !important;
-        min-height: 100vh !important;
-    }
-}
-
-/* iOS Safari specific fixes */
-@supports (-webkit-touch-callout: none) {
-    .video-container {
-        width: 100vw;
-        height: 100vh;
-        min-width: 100vw;
-        min-height: 100vh;
-    }
-    
-    .background-video {
-        width: 100vw;
-        height: 100vh;
-        min-width: 100vw;
-        min-height: 100vh;
-    }
-}
-
-/* Sound Enable Button */
+/* ============================================
+   SOUND BUTTON
+   ============================================ */
 .sound-button {
-    position: absolute;
+    position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 6;
+    z-index: 100;
     cursor: pointer;
-    transition: all 0.3s ease;
-    animation: soundButtonPulse 2s ease-in-out infinite;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3);
+    pointer-events: all;
     touch-action: manipulation;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.sound-button:hover {
-    transform: scale(1.1);
-    animation: soundButtonPulse 1s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .sound-button-content {
@@ -184,59 +70,30 @@ body {
     -webkit-backdrop-filter: blur(20px);
     padding: 12px 18px;
     border-radius: 30px;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(255, 255, 255, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
     gap: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.sound-button-content::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-    animation: buttonShimmer 4s ease-in-out infinite;
-    pointer-events: none;
 }
 
 .sound-button:hover .sound-button-content {
     background: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(255, 255, 255, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
 }
 
 .sound-button-icon {
     font-size: 24px;
-    animation: soundIconBounce 2s ease-in-out infinite;
     filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
-    position: relative;
-    z-index: 1;
 }
 
 .sound-button-text {
     font-size: 16px;
-    font-weight: 600;
     color: #ffffff;
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.8),
-        0 0 20px rgba(255, 255, 255, 0.5),
-        0 2px 4px rgba(0, 0, 0, 0.3);
-    letter-spacing: 1px;
-    position: relative;
-    z-index: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .sound-button.enabled .sound-button-content {
@@ -244,46 +101,19 @@ body {
     border-color: rgba(76, 175, 80, 0.5);
 }
 
-.sound-button.enabled:hover .sound-button-content {
-    background: rgba(76, 175, 80, 0.4);
-    border-color: rgba(76, 175, 80, 0.6);
-}
-
-@keyframes soundButtonPulse {
-    0%, 100% {
-        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.4));
-    }
-    50% {
-        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.6));
-    }
-}
-
-@keyframes soundIconBounce {
-    0%, 100% {
-        transform: translateY(0) scale(1);
-    }
-    50% {
-        transform: translateY(-3px) scale(1.1);
-    }
-}
-
-/* Quest Button Overlay on Video - Warm Winter Theme */
+/* ============================================
+   QUEST BUTTON
+   ============================================ */
 .video-quest-button {
-    position: absolute;
+    position: fixed;
     bottom: 12%;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 5;
+    z-index: 50;
     cursor: pointer;
-    transition: all 0.3s ease;
-    animation: questButtonPulse 2.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8));
-}
-
-.video-quest-button:hover {
-    transform: translateX(-50%) scale(1.15);
-    animation: questButtonPulse 1.2s ease-in-out infinite;
-    filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1));
+    pointer-events: all;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
 }
 
 .quest-button-content {
@@ -292,113 +122,44 @@ body {
     -webkit-backdrop-filter: blur(20px);
     padding: 20px 45px;
     border-radius: 50px;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(255, 255, 255, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.quest-button-content::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-    animation: buttonShimmer 4s ease-in-out infinite;
 }
 
 .video-quest-button:hover .quest-button-content {
     background: rgba(255, 255, 255, 0.25);
-    box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(255, 255, 255, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: translateY(-3px);
+    transform: scale(1.1);
 }
 
 .quest-button-icon {
-    font-size: 42px;
-    animation: iconBounce 2.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
-    position: relative;
-    z-index: 1;
+    font-size: 36px;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
 }
 
 .quest-button-text {
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 24px;
     color: #ffffff;
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.8),
-        0 0 20px rgba(255, 255, 255, 0.5),
-        0 2px 4px rgba(0, 0, 0, 0.3);
-    letter-spacing: 2px;
-    position: relative;
-    z-index: 1;
-    font-family: 'Georgia', 'Times New Roman', serif;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-@keyframes questButtonPulse {
-    0%, 100% {
-        filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.4));
-    }
-    50% {
-        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.6));
-    }
-}
-
-@keyframes buttonShimmer {
-    0%, 100% {
-        transform: rotate(0deg) translate(-50%, -50%);
-        opacity: 0.3;
-    }
-    50% {
-        transform: rotate(180deg) translate(-50%, -50%);
-        opacity: 0.6;
-    }
-}
-
-@keyframes iconBounce {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg) scale(1);
-    }
-    25% {
-        transform: translateY(-6px) rotate(-8deg) scale(1.1);
-    }
-    75% {
-        transform: translateY(-6px) rotate(8deg) scale(1.1);
-    }
-}
-
-/* Magnifying Glass Cursor for Quest 1 */
-body.quest-search-mode {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="12" cy="12" r="8" fill="none" stroke="%23ffd700" stroke-width="2"/><line x1="20" y1="20" x2="28" y2="28" stroke="%23ffd700" stroke-width="2" stroke-linecap="round"/></svg>') 16 16, auto;
-}
-
-body.quest-search-mode * {
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="12" cy="12" r="8" fill="none" stroke="%23ffd700" stroke-width="2"/><line x1="20" y1="20" x2="28" y2="28" stroke="%23ffd700" stroke-width="2" stroke-linecap="round"/></svg>') 16 16, auto;
-}
-
-/* Snow Container */
+/* ============================================
+   SNOWFLAKES
+   ============================================ */
 .snow-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    z-index: 2;
     pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
 }
 
 .snowflake {
@@ -406,592 +167,56 @@ body.quest-search-mode * {
     top: -10px;
     color: #ffffff;
     font-size: 1em;
-    font-family: Arial, sans-serif;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
     animation: fall linear infinite;
-    opacity: 0.8;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 @keyframes fall {
-    to {
-        transform: translateY(100vh) rotate(360deg);
-    }
-}
-
-/* Content Container */
-.content-container {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    pointer-events: none;
-}
-
-.content-container > * {
-    pointer-events: auto;
-}
-
-/* Gift Box Container */
-.gift-box-container {
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    margin-bottom: 40px;
-}
-
-.gift-box-container:hover {
-    transform: scale(1.05);
-}
-
-.gift-box-container.opened {
-    cursor: default;
-    pointer-events: none;
-}
-
-.gift-box-container.opened .gift-box {
-    animation: boxOpen 1s ease-out forwards;
-}
-
-.gift-box-container.opened .gift-box-lid {
-    animation: lidOpen 1s ease-out forwards;
-}
-
-/* 3D Gift Box */
-.gift-box {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    transform-style: preserve-3d;
-    perspective: 1000px;
-}
-
-.gift-box-body {
-    position: absolute;
-    width: 200px;
-    height: 150px;
-    background: linear-gradient(135deg, #c41e3a 0%, #8b1538 100%);
-    border-radius: 8px;
-    box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.5),
-        inset 0 2px 10px rgba(255, 255, 255, 0.1),
-        0 0 20px rgba(196, 30, 58, 0.3);
-    transform: translateZ(0);
-    position: relative;
-    overflow: hidden;
-}
-
-.gift-box-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 20px,
-            rgba(255, 255, 255, 0.1) 20px,
-            rgba(255, 255, 255, 0.1) 40px
-        );
-}
-
-.gift-box-lid {
-    position: absolute;
-    width: 200px;
-    height: 60px;
-    background: linear-gradient(135deg, #d32f2f 0%, #9a1a1a 100%);
-    border-radius: 8px 8px 0 0;
-    box-shadow: 
-        0 -5px 20px rgba(0, 0, 0, 0.4),
-        inset 0 2px 10px rgba(255, 255, 255, 0.1),
-        0 0 15px rgba(211, 47, 47, 0.3);
-    transform-origin: bottom center;
-    transform: translateZ(0);
-    z-index: 2;
-}
-
-.gift-box-ribbon {
-    position: absolute;
-    background: linear-gradient(90deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    z-index: 3;
-}
-
-.gift-box-ribbon-horizontal {
-    width: 100%;
-    height: 20px;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-}
-
-.gift-box-ribbon-vertical {
-    width: 20px;
-    height: 100%;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-}
-
-.gift-box-bow {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 4;
-}
-
-.gift-box-bow::before,
-.gift-box-bow::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-    border-radius: 50% 50% 50% 0;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-}
-
-.gift-box-bow::before {
-    left: 0;
-    transform: rotate(-45deg);
-}
-
-.gift-box-bow::after {
-    right: 0;
-    transform: rotate(45deg);
-}
-
-.gift-box-text {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 24px;
-    color: #ffffff;
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.8),
-        0 0 20px rgba(255, 215, 0, 0.5);
-    font-weight: bold;
-    letter-spacing: 1px;
-    animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-    from {
-        text-shadow: 
-            0 0 10px rgba(255, 255, 255, 0.8),
-            0 0 20px rgba(255, 215, 0, 0.5);
-    }
-    to {
-        text-shadow: 
-            0 0 15px rgba(255, 255, 255, 1),
-            0 0 30px rgba(255, 215, 0, 0.8),
-            0 0 40px rgba(255, 215, 0, 0.6);
-    }
-}
-
-/* Box Opening Animations */
-@keyframes boxOpen {
     0% {
-        transform: scale(1) translateZ(0);
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0.8;
     }
     50% {
-        transform: scale(1.1) translateZ(20px);
+        transform: translateY(50vh) translateX(20px) rotate(180deg);
+        opacity: 0.6;
     }
     100% {
-        transform: scale(0.8) translateZ(0);
+        transform: translateY(100vh) translateX(-20px) rotate(360deg);
         opacity: 0.3;
     }
 }
 
-@keyframes lidOpen {
-    0% {
-        transform: translateZ(0) rotateX(0deg);
-    }
-    100% {
-        transform: translateZ(30px) rotateX(-120deg);
-        opacity: 0;
-    }
-}
-
-/* Message Container */
-.message-container {
-    max-width: 700px;
-    max-height: 85vh;
-    padding: 20px;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    transition: opacity 1s ease, transform 1s ease;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 215, 0, 0.5) transparent;
-}
-
-/* Custom scrollbar for message container */
-.message-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.message-container::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 10px;
-}
-
-.message-container::-webkit-scrollbar-thumb {
-    background: rgba(255, 215, 0, 0.5);
-    border-radius: 10px;
-}
-
-.message-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 215, 0, 0.7);
-}
-
-.message-container.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-/* Professional Card Design with Glassmorphism */
-.message-card {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 50px 40px;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 0 60px rgba(255, 215, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    position: relative;
-    overflow: hidden;
-}
-
-.message-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
-    animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0%, 100% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-}
-
-/* Message Decorations - Sparkles */
-.message-decorations {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.sparkle {
-    position: absolute;
-    font-size: 20px;
-    opacity: 0;
-    animation: sparkleFloat 3s ease-in-out infinite;
-}
-
-.sparkle-1 {
-    top: 10%;
-    left: 10%;
-    animation-delay: 0s;
-}
-
-.sparkle-2 {
-    top: 20%;
-    right: 15%;
-    animation-delay: 0.5s;
-}
-
-.sparkle-3 {
-    bottom: 15%;
-    left: 15%;
-    animation-delay: 1s;
-}
-
-.sparkle-4 {
-    bottom: 10%;
-    right: 10%;
-    animation-delay: 1.5s;
-}
-
-@keyframes sparkleFloat {
-    0%, 100% {
-        opacity: 0;
-        transform: translateY(0) scale(0.8);
-    }
-    50% {
-        opacity: 1;
-        transform: translateY(-20px) scale(1.2);
-    }
-}
-
-/* Main Message */
-.message-main {
-    font-size: 36px;
-    line-height: 1.5;
-    color: #ffffff;
-    text-shadow: 
-        0 0 15px rgba(255, 255, 255, 0.5),
-        0 0 30px rgba(255, 215, 0, 0.4),
-        0 4px 8px rgba(0, 0, 0, 0.3);
-    font-weight: 400;
-    letter-spacing: 0.5px;
-    margin-bottom: 30px;
-    position: relative;
-    z-index: 1;
-}
-
-.message-main::after {
-    content: '|';
-    animation: blink 1s infinite;
-    color: #ffd700;
-    margin-left: 5px;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-}
-
-.message-main.complete::after {
-    display: none;
-}
-
-/* Additional Message */
-.message-additional {
-    font-size: 22px;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.3),
-        0 0 20px rgba(255, 215, 0, 0.2),
-        0 2px 4px rgba(0, 0, 0, 0.2);
-    font-weight: 300;
-    letter-spacing: 0.3px;
-    margin-top: 25px;
-    padding-top: 25px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    position: relative;
-    z-index: 1;
-}
-
-.message-additional.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.message-additional::after {
-    content: '|';
-    animation: blink 1s infinite;
-    color: #ffd700;
-    margin-left: 5px;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-}
-
-.message-additional.complete::after {
-    display: none;
-}
-
-/* Signature Section */
-.message-signature {
-    font-size: 18px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.85);
-    text-shadow: 
-        0 0 8px rgba(255, 255, 255, 0.2),
-        0 2px 4px rgba(0, 0, 0, 0.2);
-    font-weight: 300;
-    font-style: italic;
-    letter-spacing: 0.5px;
-    margin-top: 30px;
-    padding-top: 25px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    position: relative;
-    z-index: 1;
-}
-
-.message-signature.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.message-signature::after {
-    content: '|';
-    animation: blink 1s infinite;
-    color: #ffd700;
-    margin-left: 5px;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-}
-
-.message-signature.complete::after {
-    display: none;
-}
-
-@keyframes blink {
-    0%, 50% {
-        opacity: 1;
-    }
-    51%, 100% {
-        opacity: 0;
-    }
-}
-
-/* Confetti Container */
-.confetti-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 5;
-    overflow: hidden;
-}
-
-.confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: #ffd700;
-    opacity: 0.9;
-    animation: confettiFall linear forwards;
-}
-
-.confetti:nth-child(2n) {
-    background: #ff6b6b;
-}
-
-.confetti:nth-child(3n) {
-    background: #4ecdc4;
-}
-
-.confetti:nth-child(4n) {
-    background: #ffe66d;
-}
-
-.confetti:nth-child(5n) {
-    background: #a8e6cf;
-}
-
-@keyframes confettiFall {
-    0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-    }
-}
-
-/* Quest System */
+/* ============================================
+   QUEST CONTAINER & CARD
+   ============================================ */
 .quest-container {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
-    z-index: 20;
+    z-index: 200;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    max-height: 85vh;
-    overflow: visible;
-    width: 100%;
+    width: 90%;
     max-width: 550px;
+    max-height: 85vh;
     padding: 0;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.quest-container::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(
-        ellipse at center,
-        rgba(255, 180, 50, 0.15) 0%,
-        rgba(255, 200, 87, 0.1) 30%,
-        rgba(255, 140, 26, 0.05) 50%,
-        transparent 100%
-    );
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    z-index: -1;
-    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .quest-container.visible {
     opacity: 1;
     pointer-events: all;
     transform: translate(-50%, -50%) scale(1);
-    animation: questCardEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
+
+
 
 .quest-container.visible::before {
     opacity: 1;
-    pointer-events: all;
-}
-
-@keyframes questCardEntrance {
-    0% {
-        transform: translate(-50%, -50%) scale(0.5) rotate(-5deg);
-        opacity: 0;
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(1.05) rotate(2deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(1) rotate(0deg);
-        opacity: 1;
-    }
-}
-
-/* Mobile-specific entrance animation */
-@media (max-width: 768px) {
-    @keyframes questCardEntrance {
-        0% {
-            transform: translateY(-50%) scale(0.5);
-            opacity: 0;
-        }
-        50% {
-            transform: translateY(-50%) scale(1.05);
-        }
-        100% {
-            transform: translateY(-50%) scale(1);
-            opacity: 1;
-        }
-    }
 }
 
 .quest-card {
@@ -1000,20 +225,14 @@ body.quest-search-mode * {
     -webkit-backdrop-filter: blur(25px);
     border-radius: 24px;
     padding: 40px 35px;
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(255, 255, 255, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    position: relative;
+    max-height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 80vh;
-    animation: cardGlow 3s ease-in-out infinite;
-    box-sizing: border-box;
+    scroll-behavior: auto;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
@@ -1023,157 +242,46 @@ body.quest-search-mode * {
     width: 6px;
 }
 
-.quest-card::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 10px;
-}
-
 .quest-card::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.4);
     border-radius: 10px;
 }
 
-.quest-card::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.6);
+.quest-card:focus,
+.quest-card *:focus {
+    outline: none;
 }
 
-.quest-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-    animation: cardShimmer 5s ease-in-out infinite;
-    pointer-events: none;
+.quest-card * {
+    scroll-margin: 0;
 }
 
-.quest-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        linear-gradient(45deg, transparent 30%, rgba(255, 215, 0, 0.05) 50%, transparent 70%);
-    animation: cardShine 3s ease-in-out infinite;
-    pointer-events: none;
-}
-
-@keyframes cardGlow {
-    0%, 100% {
-        box-shadow: 
-            0 20px 60px rgba(0, 0, 0, 0.4),
-            0 0 25px rgba(255, 255, 255, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    }
-    50% {
-        box-shadow: 
-            0 20px 60px rgba(0, 0, 0, 0.5),
-            0 0 35px rgba(255, 255, 255, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    }
-}
-
-@keyframes cardShimmer {
-    0%, 100% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-}
-
-@keyframes cardShine {
-    0% {
-        transform: translateX(-100%) translateY(-100%);
-    }
-    100% {
-        transform: translateX(100%) translateY(100%);
-    }
-}
-
+/* Quest Header */
 .quest-header {
     text-align: center;
     margin-bottom: 30px;
-    position: relative;
-    z-index: 1;
 }
 
 .quest-title {
-    font-size: 28px;
+    font-size: 32px;
     color: #ffffff;
-    text-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.8),
-        0 4px 12px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 215, 0, 0.6),
-        0 0 30px rgba(255, 215, 0, 0.4);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 255, 255, 0.8);
+    font-weight: 700;
     margin-bottom: 10px;
-    font-weight: 800;
     letter-spacing: 1px;
-    animation: titlePulse 2s ease-in-out infinite;
-    position: relative;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    line-height: 1.3;
-}
-
-.quest-title::after {
-    content: '✨';
-    position: absolute;
-    top: -10px;
-    right: -30px;
-    font-size: 20px;
-    animation: sparkleRotate 3s linear infinite;
-}
-
-.quest-title::before {
-    content: '✨';
-    position: absolute;
-    top: -10px;
-    left: -30px;
-    font-size: 20px;
-    animation: sparkleRotate 3s linear infinite reverse;
-}
-
-@keyframes titlePulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.02);
-    }
-}
-
-@keyframes sparkleRotate {
-    0% {
-        transform: rotate(0deg) scale(1);
-        opacity: 0.8;
-    }
-    50% {
-        transform: rotate(180deg) scale(1.2);
-        opacity: 1;
-    }
-    100% {
-        transform: rotate(360deg) scale(1);
-        opacity: 0.8;
-    }
 }
 
 .quest-subtitle {
-    font-size: 15px;
+    font-size: 17px;
     color: #ffffff;
-    line-height: 1.6;
-    text-shadow: 
-        0 2px 5px rgba(0, 0, 0, 0.8),
-        0 0 15px rgba(255, 215, 0, 0.5);
-    font-weight: 600;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+    font-weight: 500;
     font-style: italic;
 }
 
+/* Quest Steps */
 .quest-steps {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .quest-step {
@@ -1184,143 +292,104 @@ body.quest-search-mode * {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.3s ease;
     opacity: 0.85;
-    transform: translateX(-20px);
-    animation: stepFadeIn 0.5s ease-out forwards;
-    animation-delay: calc(var(--step-index) * 0.1s);
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-}
-
-@keyframes stepFadeIn {
-    to {
-        opacity: 0.85;
-        transform: translateX(0);
-    }
 }
 
 .quest-step.active {
     opacity: 1;
     background: rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 
-        0 6px 20px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(255, 255, 255, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    transform: translateX(5px) scale(1.02);
-    animation: stepPulse 2s ease-in-out infinite;
-}
-
-@keyframes stepPulse {
-    0%, 100% {
-        box-shadow: 
-            0 6px 20px rgba(0, 0, 0, 0.3),
-            0 0 20px rgba(255, 255, 255, 0.25),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4);
-    }
-    50% {
-        box-shadow: 
-            0 8px 25px rgba(0, 0, 0, 0.35),
-            0 0 30px rgba(255, 255, 255, 0.35),
-            inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    }
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .quest-step.completed {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.4);
-    border-color: rgba(255, 255, 255, 0.6);
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        0 0 20px rgba(255, 255, 255, 0.25);
+    opacity: 0.7;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .quest-step-icon {
-    font-size: 24px;
-    margin-right: 12px;
-    width: 30px;
+    font-size: 28px;
+    margin-right: 15px;
+    min-width: 35px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+    animation: iconGlow 2s ease-in-out infinite;
+}
+
+.quest-step.active .quest-step-icon {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1)) 
+            drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
+    animation: iconGlow 1.5s ease-in-out infinite;
+    transform: scale(1.1);
+}
+
+@keyframes iconGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+    }
+    50% {
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1)) 
+                drop-shadow(0 0 30px rgba(255, 215, 0, 0.9));
+    }
 }
 
 .quest-step-text {
     flex: 1;
-    font-size: 16px;
     color: #ffffff;
-    text-shadow: 
-        0 0 12px rgba(255, 255, 255, 0.9),
-        0 0 20px rgba(255, 255, 255, 0.6),
-        0 2px 4px rgba(0, 0, 0, 0.3);
-    font-weight: 500;
-    line-height: 1.5;
 }
 
 .quest-step-main-text {
-    font-weight: 600;
-    margin-bottom: 5px;
     font-size: 17px;
-    text-shadow: 
-        0 0 15px rgba(255, 255, 255, 1),
-        0 0 25px rgba(255, 255, 255, 0.7),
-        0 2px 5px rgba(0, 0, 0, 0.4);
+    font-weight: 600;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+    margin-bottom: 5px;
 }
 
 .quest-step-hint {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.9);
     font-style: italic;
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.8),
-        0 0 15px rgba(255, 255, 255, 0.5),
-        0 1px 3px rgba(0, 0, 0, 0.3);
-    font-weight: 500;
-    margin-top: 4px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    opacity: 0.9;
 }
 
 .quest-step-check {
-    font-size: 20px;
+    font-size: 24px;
     color: #4caf50;
     opacity: 0;
-    transform: scale(0);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
 .quest-step.completed .quest-step-check {
     opacity: 1;
-    transform: scale(1);
 }
 
+/* Quest Progress */
 .quest-progress {
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-top: 20px;
 }
 
 .quest-progress-bar {
     flex: 1;
     height: 10px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 
-        inset 0 2px 4px rgba(0, 0, 0, 0.2),
-        0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .quest-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, 
-        rgba(255, 215, 0, 1) 0%, 
-        rgba(255, 237, 78, 1) 50%,
-        rgba(255, 200, 87, 1) 100%);
+    background: linear-gradient(90deg, rgba(255, 215, 0, 1) 0%, rgba(255, 237, 78, 1) 100%);
     border-radius: 12px;
     width: 0%;
     transition: width 0.5s ease;
-    box-shadow: 
-        0 0 15px rgba(255, 215, 0, 0.8),
-        inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
 }
 
 .quest-progress-text {
@@ -1329,13 +398,12 @@ body.quest-search-mode * {
     font-weight: 700;
     min-width: 45px;
     text-align: right;
-    text-shadow: 
-        0 0 15px rgba(255, 255, 255, 0.9),
-        0 0 25px rgba(255, 255, 255, 0.6),
-        0 2px 4px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
 }
 
-/* Hidden Interactive Elements */
+/* ============================================
+   HIDDEN ELEMENT (QUEST STAR)
+   ============================================ */
 .hidden-elements-container {
     position: fixed;
     top: 0;
@@ -1343,94 +411,62 @@ body.quest-search-mode * {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 45;
+    z-index: 150;
     overflow: hidden;
 }
 
 .hidden-element {
-    position: absolute;
+    position: fixed;
     cursor: pointer;
-    font-size: 50px;
+    font-size: 70px;
     opacity: 0.1;
-    transition: opacity 0.5s ease, filter 0.3s ease, transform 0.3s ease;
-    pointer-events: all !important;
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9));
-    z-index: 25;
+    pointer-events: all;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1));
+    transition: opacity 0.5s ease, transform 0.3s ease;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 151;
 }
 
 .hidden-element.visible {
-    opacity: 0.5 !important;
-    animation: pulseGlow 1.5s ease-in-out infinite, float 3s ease-in-out infinite, elementAppear 1s ease-out forwards;
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 70px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 90px rgba(255, 215, 0, 0.8));
+    opacity: 0.2;
+    animation: starPulse 2s ease-in-out infinite, starFloat 3s ease-in-out infinite;
     display: block !important;
     visibility: visible !important;
-    font-size: 70px !important;
-    transition: opacity 0.5s ease, font-size 0.5s ease;
-    z-index: 50 !important;
-    position: fixed !important;
 }
 
 .hidden-element.visible:hover {
-    opacity: 1 !important;
-    font-size: 75px !important;
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 70px rgba(255, 215, 0, 0.9)) !important;
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+    filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)) 
+            drop-shadow(0 0 70px rgba(255, 215, 0, 0.9));
 }
 
-@keyframes elementAppear {
-    0% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    50% {
-        opacity: 0.4;
-        transform: scale(1.1);
-    }
-    100% {
-        opacity: 0.5;
-        transform: scale(1);
-    }
-}
-
-.hidden-element:hover {
-    transform: scale(1.3) !important;
-    opacity: 1 !important;
-    filter: drop-shadow(0 0 35px rgba(255, 215, 0, 1)) drop-shadow(0 0 55px rgba(255, 215, 0, 1)) drop-shadow(0 0 75px rgba(255, 215, 0, 0.9)) !important;
-    animation: pulseGlow 0.8s ease-in-out infinite, float 3s ease-in-out infinite !important;
-}
-
-.hidden-element.found {
-    animation: foundElement 0.6s ease-out forwards;
-    pointer-events: none;
-    transition: none;
-}
-
-/* Visual Guide Arrow pointing to element */
-.quest-guide-arrow {
-    position: fixed;
-    font-size: 40px;
-    color: #ffd700;
-    z-index: 24;
-    pointer-events: none;
-    animation: pointArrow 1.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
-}
-
-@keyframes pointArrow {
+@keyframes starPulse {
     0%, 100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 0.8;
+        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) 
+                drop-shadow(0 0 50px rgba(255, 215, 0, 0.8));
     }
     50% {
-        transform: translate(10px, 10px) scale(1.2);
-        opacity: 1;
+        filter: drop-shadow(0 0 50px rgba(255, 215, 0, 1)) 
+                drop-shadow(0 0 80px rgba(255, 215, 0, 1));
     }
 }
 
-/* Spotlight effect around hidden element */
+@keyframes starFloat {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
 .hidden-element.visible::after {
     content: '';
     position: absolute;
@@ -1452,186 +488,215 @@ body.quest-search-mode * {
         opacity: 0.6;
     }
     50% {
-        transform: translate(-50%, -50%) scale(1.5);
-        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.8;
     }
 }
 
-/* Hint indicator for active quest step */
 .hidden-element.visible::before {
     content: '👆 Կտտացրու';
     position: absolute;
     top: -70px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 19px;
+    font-size: 18px;
     color: #ffffff;
-    white-space: nowrap;
-    text-shadow: 
-        0 0 20px rgba(255, 255, 255, 1),
-        0 0 30px rgba(255, 255, 255, 0.9),
-        0 2px 6px rgba(0, 0, 0, 0.6);
-    animation: bounceHint 1s ease-in-out infinite;
-    pointer-events: none;
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
     padding: 10px 18px;
-    border-radius: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    z-index: 51;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
     font-weight: 700;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 1);
+    pointer-events: none;
+    z-index: 152;
 }
 
-@keyframes bounceHint {
+/* ============================================
+   CONTENT & MESSAGE
+   ============================================ */
+.content-container {
+    position: relative;
+    z-index: 1;
+}
+
+.message-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 300;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    scroll-behavior: auto;
+    overscroll-behavior: contain;
+}
+
+.message-container.visible {
+    display: block;
+}
+
+.message-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    border-radius: 24px;
+    padding: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+}
+
+.message-decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.sparkle {
+    position: absolute;
+    font-size: 30px;
+    opacity: 0;
+    animation: sparkleFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+}
+
+.sparkle-1 { top: 10%; left: 10%; animation-delay: 0s; }
+.sparkle-2 { top: 20%; right: 15%; animation-delay: 1s; }
+.sparkle-3 { bottom: 20%; left: 15%; animation-delay: 2s; }
+.sparkle-4 { bottom: 10%; right: 10%; animation-delay: 3s; }
+
+@keyframes sparkleFloat {
     0%, 100% {
-        transform: translateX(-50%) translateY(0);
-        opacity: 0.9;
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
     }
     50% {
-        transform: translateX(-50%) translateY(-8px);
+        transform: translateY(-20px) scale(1.2);
         opacity: 1;
     }
 }
 
-@keyframes pulseGlow {
-    0%, 100% {
-        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
-        transform: scale(1);
-    }
-    50% {
-        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1));
-        transform: scale(1.15);
-    }
+.message-main,
+.message-additional,
+.message-signature {
+    position: relative;
+    z-index: 1;
 }
 
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
+.message-main {
+    font-size: 28px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+    font-weight: 600;
 }
 
-@keyframes foundElement {
+.message-additional {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 20px;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+}
+
+.message-signature {
+    font-size: 16px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-style: italic;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================
+   CONFETTI
+   ============================================ */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.confetti {
+    position: absolute;
+    top: -10px;
+    background: #ffd700;
+    animation: confettiFall linear infinite;
+    pointer-events: none;
+}
+
+@keyframes confettiFall {
     0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(2) rotate(180deg);
+        transform: translateY(0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        transform: scale(0) rotate(360deg);
+        transform: translateY(100vh) rotate(720deg);
         opacity: 0;
     }
 }
 
-/* Achievement Popup */
-.achievement-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    z-index: 25;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-}
-
-.achievement-popup.show {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    pointer-events: all;
-}
-
-.achievement-content {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.95) 0%, rgba(255, 237, 78, 0.95) 100%);
-    padding: 30px 40px;
-    border-radius: 20px;
-    box-shadow: 
-        0 10px 40px rgba(0, 0, 0, 0.4),
-        0 0 30px rgba(255, 215, 0, 0.6);
-    text-align: center;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    min-width: 300px;
-}
-
-.achievement-icon {
-    font-size: 50px;
-    margin-bottom: 15px;
-    animation: bounce 0.6s ease;
-}
-
-.achievement-text {
-    font-size: 20px;
-    color: #1a1a1a;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-/* Quest Minigames */
+/* ============================================
+   MINIGAMES
+   ============================================ */
 .quest-minigame {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
-    z-index: 30;
+    z-index: 250;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    width: 100%;
+    width: 90%;
     max-width: 500px;
-    padding: 0 20px;
-    box-sizing: border-box;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    display: none;
 }
 
 .quest-minigame.visible {
     opacity: 1;
     pointer-events: all;
     transform: translate(-50%, -50%) scale(1);
+    display: block;
 }
 
 .minigame-card {
-    background: linear-gradient(135deg, rgba(10, 25, 41, 0.98) 0%, rgba(26, 47, 74, 0.98) 100%);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
     border-radius: 24px;
-    padding: 40px;
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        0 0 80px rgba(255, 215, 0, 0.3);
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    min-width: 400px;
-    max-width: 500px;
-    width: 100%;
+    padding: 40px 35px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
     text-align: center;
-    box-sizing: border-box;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .minigame-card h3 {
     font-size: 24px;
-    color: #ffd700;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
     margin-bottom: 10px;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    font-weight: 700;
 }
 
 .minigame-card p {
     font-size: 16px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
     margin-bottom: 25px;
 }
 
@@ -1641,6 +706,7 @@ body.quest-search-mode * {
     gap: 15px;
     justify-content: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .pattern-btn {
@@ -1652,6 +718,9 @@ body.quest-search-mode * {
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pattern-btn:hover {
@@ -1663,25 +732,9 @@ body.quest-search-mode * {
 
 .pattern-btn-clicked {
     transform: scale(0.9) !important;
-    box-shadow: 
-        0 0 30px rgba(255, 215, 0, 0.8),
-        0 0 50px rgba(255, 215, 0, 0.6),
-        inset 0 0 20px rgba(255, 215, 0, 0.3) !important;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8) !important;
     background: rgba(255, 215, 0, 0.4) !important;
     border-color: rgba(255, 215, 0, 1) !important;
-    animation: buttonPulse 0.3s ease-out;
-}
-
-@keyframes buttonPulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(0.85);
-    }
-    100% {
-        transform: scale(0.9);
-    }
 }
 
 .pattern-sequence {
@@ -1689,6 +742,7 @@ body.quest-search-mode * {
     gap: 10px;
     justify-content: center;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .pattern-item {
@@ -1701,17 +755,6 @@ body.quest-search-mode * {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-@keyframes patternShow {
-    0% {
-        transform: scale(0) rotate(180deg);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-    }
 }
 
 /* Memory Game */
@@ -1734,8 +777,6 @@ body.quest-search-mode * {
     justify-content: center;
     font-size: 30px;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
 }
 
 .memory-card:hover {
@@ -1781,25 +822,10 @@ body.quest-search-mode * {
 .counting-star {
     font-size: 40px;
     display: inline-block;
-    animation: countingStarAppear 0.5s ease-out forwards;
     opacity: 0;
     transform: scale(0);
     filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
     transition: all 0.5s ease;
-}
-
-@keyframes countingStarAppear {
-    0% {
-        transform: scale(0) rotate(0deg);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.2) rotate(180deg);
-    }
-    100% {
-        transform: scale(1) rotate(360deg);
-        opacity: 1;
-    }
 }
 
 .counting-options {
@@ -1836,41 +862,6 @@ body.quest-search-mode * {
     opacity: 0.6;
 }
 
-.counting-btn.counting-correct {
-    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-    border-color: #4caf50;
-    box-shadow: 0 0 30px rgba(76, 175, 80, 0.6);
-    animation: correctPulse 0.5s ease;
-}
-
-.counting-btn.counting-wrong {
-    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-    border-color: #f44336;
-    box-shadow: 0 0 30px rgba(244, 67, 54, 0.6);
-    animation: wrongShake 0.5s ease;
-}
-
-@keyframes correctPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-}
-
-@keyframes wrongShake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    25% {
-        transform: translateX(-10px);
-    }
-    75% {
-        transform: translateX(10px);
-    }
-}
-
 .counting-result {
     font-size: 20px;
     font-weight: 600;
@@ -1898,335 +889,82 @@ body.quest-search-mode * {
     text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
 }
 
-/* Hide gift box container when video is active */
-.video-container ~ .content-container .gift-box-container {
-    display: none;
+/* ============================================
+   ACHIEVEMENT POPUP
+   ============================================ */
+.achievement-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 400;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    body {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-    
+.achievement-popup.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.achievement-content {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    border-radius: 24px;
+    padding: 30px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+}
+
+.achievement-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.achievement-text {
+    font-size: 20px;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE FIRST
+   ============================================ */
+
+/* Small Mobile (430px and below) */
+@media screen and (max-width: 430px) {
     .sound-button {
         top: 10px;
         right: 10px;
     }
     
     .sound-button-content {
-        padding: 10px 15px;
-        gap: 8px;
+        padding: 3px 4px;
+        gap: 5px;
     }
     
     .sound-button-icon {
-        font-size: 20px;
+        font-size: 16px;
     }
     
     .sound-button-text {
-        font-size: 14px;
-        letter-spacing: 0.5px;
-    }
-    
-    .quest-button-content {
-        padding: 18px 35px;
-        gap: 15px;
-    }
-    
-    .quest-button-icon {
-        font-size: 32px;
-    }
-    
-    .quest-button-text {
-        font-size: 22px;
-        letter-spacing: 1px;
+        font-size: 11px;
     }
     
     .video-quest-button {
         bottom: 8%;
         left: 50%;
         transform: translateX(-50%);
-    }
-    
-    .video-quest-button:hover {
-        transform: translateX(-50%) scale(1.1);
-    }
-    .gift-box {
-        width: 150px;
-        height: 150px;
-    }
-    
-    .gift-box-body {
-        width: 150px;
-        height: 110px;
-    }
-    
-    .gift-box-lid {
-        width: 150px;
-        height: 45px;
-    }
-    
-    .gift-box-text {
-        font-size: 20px;
-    }
-    
-    .content-container {
-        width: 100%;
-        padding: 0 10px;
-    }
-    
-    .message-container {
-        padding: 15px;
-        max-width: 95%;
-        width: 100%;
-    }
-    
-    .message-card {
-        padding: 35px 25px;
-        border-radius: 20px;
-    }
-    
-    .message-main {
-        font-size: 24px;
-        line-height: 1.4;
-    }
-    
-    .message-additional {
-        font-size: 17px;
-        line-height: 1.5;
-        margin-top: 20px;
-    }
-    
-    .message-signature {
-        font-size: 15px;
-        margin-top: 25px;
-        padding-top: 20px;
-    }
-    
-    .snow-container {
-        width: 100%;
-        height: 100%;
-    }
-    
-    .quest-container {
-        max-height: 90vh !important;
-        padding: 8px !important;
-        width: 92% !important;
-        max-width: 92% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        overflow: visible !important;
-    }
-    
-    .quest-container::before {
-        width: 100vw;
-        height: 100vh;
-        pointer-events: none !important;
-    }
-    
-    .quest-card {
-        min-width: 0 !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 20px 16px !important;
-        border-radius: 16px !important;
-        margin: 0 auto !important;
-        max-height: 82vh !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        -webkit-overflow-scrolling: touch !important;
-        background: linear-gradient(135deg, 
-            rgba(220, 38, 38, 0.9) 0%,
-            rgba(185, 28, 28, 0.95) 50%,
-            rgba(220, 38, 38, 0.9) 100%) !important;
-    }
-    
-    .quest-title {
-        font-size: 22px !important;
-        letter-spacing: 0.5px !important;
-        margin-bottom: 8px !important;
-        line-height: 1.3 !important;
-        font-weight: 800 !important;
-    }
-    
-    .quest-title::after,
-    .quest-title::before {
-        display: none;
-    }
-    
-    .quest-subtitle {
-        font-size: 13px !important;
-        line-height: 1.5 !important;
-        font-weight: 600 !important;
-    }
-    
-    .quest-step {
-        padding: 12px 14px !important;
-        margin-bottom: 10px !important;
-        border-radius: 12px !important;
-    }
-    
-    .quest-step-text {
-        font-size: 15px !important;
-        font-weight: 600 !important;
-        line-height: 1.5 !important;
-    }
-    
-    .quest-step-main-text {
-        font-size: 16px !important;
-        font-weight: 700 !important;
-        line-height: 1.5 !important;
-    }
-    
-    .quest-step-hint {
-        font-size: 12px !important;
-        font-weight: 500 !important;
-        line-height: 1.5 !important;
-    }
-    
-    .quest-step-icon {
-        font-size: 20px !important;
-        margin-right: 10px !important;
-    }
-    
-    .quest-progress {
-        gap: 12px;
-        margin-top: 20px;
-    }
-    
-    .quest-progress-bar {
-        height: 8px;
-    }
-    
-    .quest-progress-text {
-        font-size: 15px;
-        min-width: 40px;
-    }
-    
-    .achievement-content {
-        min-width: 80%;
-        padding: 25px 20px;
-    }
-    
-    .achievement-text {
-        font-size: 18px;
-    }
-    
-    .hidden-element {
-        font-size: 60px !important;
-    }
-    
-    .hidden-element.visible {
-        font-size: 80px !important;
-        opacity: 1 !important;
-        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 80px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 100px rgba(255, 215, 0, 0.7)) !important;
-        z-index: 30 !important;
-        animation: pulseGlow 1s ease-in-out infinite, float 2s ease-in-out infinite, elementAppear 1s ease-out forwards !important;
-    }
-    
-    .hidden-element.visible:hover {
-        font-size: 90px !important;
-    }
-    
-    .hidden-element.visible::after {
-        width: 250px !important;
-        height: 250px !important;
-    }
-    
-    .hidden-element.visible::before {
-        font-size: 22px !important;
-        top: -70px !important;
-        padding: 10px 20px !important;
-    }
-    
-    .quest-minigame {
-        width: 100%;
-        max-width: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-        left: 0;
-        right: 0;
-        transform: translateY(-50%) scale(0.8);
-    }
-    
-    .quest-minigame.visible {
-        transform: translateY(-50%) scale(1);
-    }
-    
-    .minigame-card {
-        min-width: 0;
-        max-width: 100%;
-        width: 100%;
-        padding: 25px 20px;
-        box-sizing: border-box;
-    }
-    
-    .minigame-card h3 {
-        font-size: 20px;
-    }
-    
-    .pattern-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 30px;
-    }
-    
-    .memory-grid {
-        max-width: 90%;
-        gap: 8px;
-    }
-    
-    .memory-card {
-        font-size: 24px;
-    }
-    
-    .counting-display {
-        min-height: 150px;
-        padding: 20px;
-    }
-    
-    .counting-star {
-        font-size: 30px;
-    }
-    
-    .counting-btn {
-        width: 70px;
-        height: 70px;
-        font-size: 24px;
-    }
-    
-    .counting-result {
-        font-size: 18px;
-        padding: 12px;
-    }
-}
-
-/* iPhone and Small Devices (430px and down) - iPhone 16 Pro, 15 Pro, etc. */
-/* Complete responsive redesign - warm red/gold theme */
-@media screen and (max-width: 430px) {
-    .sound-button {
-        top: 8px;
-        right: 8px;
-    }
-    
-    .sound-button-content {
-        padding: 8px 12px;
-        gap: 6px;
-    }
-    
-    .sound-button-icon {
-        font-size: 18px;
-    }
-    
-    .sound-button-text {
-        font-size: 12px;
+        z-index: 50;
+        position: fixed;
+        pointer-events: all;
+        touch-action: manipulation;
     }
     
     .quest-button-content {
         padding: 15px 25px;
         gap: 12px;
-        border-radius: 40px;
     }
     
     .quest-button-icon {
@@ -2235,239 +973,60 @@ body.quest-search-mode * {
     
     .quest-button-text {
         font-size: 18px;
-        letter-spacing: 0.5px;
-    }
-    
-    .video-quest-button {
-        bottom: 6%;
     }
     
     .quest-container {
-        padding: 8px !important;
-        width: 88% !important;
-        max-width: 88% !important;
-        left: 50% !important;
-        right: auto !important;
-        transform: translate(-50%, -50%) !important;
-        max-height: 85vh !important;
-        overflow: visible !important;
-        z-index: 20 !important;
-    }
-    
-    .quest-container::before {
-        pointer-events: none !important;
+        width: 88%;
+        max-width: 88%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
     }
     
     .quest-container.visible {
-        transform: translate(-50%, -50%) scale(1) !important;
+        transform: translate(-50%, -50%) scale(1);
     }
     
     .quest-card {
-        min-width: 0 !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 20px 16px !important;
-        border-radius: 20px !important;
-        margin: 0 auto !important;
-        box-sizing: border-box !important;
-        max-height: 75vh !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        -webkit-overflow-scrolling: touch !important;
-        background: rgba(255, 255, 255, 0.2) !important;
-        backdrop-filter: blur(25px) !important;
-        -webkit-backdrop-filter: blur(25px) !important;
-        border: 2px solid rgba(255, 255, 255, 0.35) !important;
-        box-shadow: 
-            0 20px 60px rgba(0, 0, 0, 0.4),
-            0 0 30px rgba(255, 255, 255, 0.25),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
-    }
-    
-    .quest-title {
-        font-size: 21px !important;
-        letter-spacing: 0.5px !important;
-        margin-bottom: 6px !important;
-        line-height: 1.3 !important;
-        font-weight: 700 !important;
-        color: #ffffff !important;
-        text-shadow: 
-            0 0 20px rgba(255, 255, 255, 1),
-            0 0 40px rgba(255, 255, 255, 0.8),
-            0 0 60px rgba(255, 255, 255, 0.5),
-            0 3px 6px rgba(0, 0, 0, 0.4) !important;
-    }
-    
-    .quest-subtitle {
-        font-size: 13px !important;
-        line-height: 1.5 !important;
-        margin-bottom: 12px !important;
-        font-weight: 500 !important;
-        color: #ffffff !important;
-        text-shadow: 
-            0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 25px rgba(255, 255, 255, 0.6),
-            0 2px 4px rgba(0, 0, 0, 0.3) !important;
-    }
-    
-    .quest-step {
-        padding: 12px 13px !important;
-        margin-bottom: 9px !important;
-        border-radius: 14px !important;
-        background: rgba(255, 255, 255, 0.15) !important;
-        border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    }
-    
-    .quest-step.active {
-        background: rgba(255, 255, 255, 0.25) !important;
-        border-color: rgba(255, 255, 255, 0.4) !important;
-    }
-    
-    .quest-step.completed {
-        background: rgba(255, 255, 255, 0.12) !important;
-    }
-    
-    .quest-step-text {
-        font-size: 15px !important;
-        line-height: 1.5 !important;
-        color: #ffffff !important;
-        text-shadow: 
-            0 0 12px rgba(255, 255, 255, 0.9),
-            0 0 20px rgba(255, 255, 255, 0.6),
-            0 2px 4px rgba(0, 0, 0, 0.3) !important;
-        font-weight: 500 !important;
-    }
-    
-    .quest-step-main-text {
-        font-size: 16px !important;
-        line-height: 1.5 !important;
-        font-weight: 600 !important;
-        color: #ffffff !important;
-        text-shadow: 
-            0 0 15px rgba(255, 255, 255, 1),
-            0 0 25px rgba(255, 255, 255, 0.7),
-            0 2px 5px rgba(0, 0, 0, 0.4) !important;
-    }
-    
-    .quest-step-hint {
-        font-size: 12px !important;
-        line-height: 1.6 !important;
-        margin-top: 5px !important;
-        color: rgba(255, 255, 255, 0.9) !important;
-        text-shadow: 
-            0 0 10px rgba(255, 255, 255, 0.8),
-            0 0 15px rgba(255, 255, 255, 0.5),
-            0 1px 3px rgba(0, 0, 0, 0.3) !important;
-        font-weight: 500 !important;
-    }
-    
-    .quest-step-icon {
-        font-size: 19px !important;
-        margin-right: 9px !important;
-        width: 24px !important;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7)) !important;
-    }
-    
-    .quest-progress {
-        margin-top: 16px !important;
-        gap: 10px !important;
-    }
-    
-    .quest-progress-text {
-        font-size: 15px !important;
-        min-width: 38px !important;
-        font-weight: 700 !important;
-        color: #ffffff !important;
-        text-shadow: 
-            0 0 15px rgba(255, 255, 255, 0.9),
-            0 0 25px rgba(255, 255, 255, 0.6),
-            0 2px 4px rgba(0, 0, 0, 0.3) !important;
+        padding: 20px 16px;
+        border-radius: 20px;
+        max-height: 75vh;
     }
     
     .quest-minigame {
-        width: 95%;
-        max-width: 95%;
-        padding: 10px;
-        box-sizing: border-box;
+        width: 88%;
+        max-width: 88%;
         left: 50%;
-        right: auto;
-        transform: translateX(-50%) translateY(-50%) scale(0.9);
-        max-height: 90vh;
-        overflow-y: auto;
+        transform: translate(-50%, -50%) scale(0.9);
     }
     
     .quest-minigame.visible {
-        transform: translateX(-50%) translateY(-50%) scale(1);
+        transform: translate(-50%, -50%) scale(1);
     }
     
     .minigame-card {
-        min-width: 0;
-        max-width: 100%;
-        width: 100%;
-        padding: 22px 18px;
-        box-sizing: border-box;
+        padding: 25px 18px;
     }
     
     .minigame-card h3 {
         font-size: 20px;
-        line-height: 1.3;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     
     .minigame-card p {
         font-size: 14px;
-        line-height: 1.5;
-    }
-    
-    /* Quest Star - Top of screen, slightly transparent, easy to find */
-    .hidden-element {
-        font-size: 80px !important;
-    }
-    
-    .hidden-element.visible {
-        font-size: 95px !important;
-        opacity: 0.5 !important;
-        filter: drop-shadow(0 0 40px rgba(255, 215, 0, 1)) 
-                drop-shadow(0 0 60px rgba(255, 215, 0, 1)) 
-                drop-shadow(0 0 90px rgba(255, 215, 0, 1)) 
-                drop-shadow(0 0 120px rgba(255, 215, 0, 0.9)) !important;
-        z-index: 50 !important;
-        position: fixed !important;
-        pointer-events: all !important;
-        animation: pulseGlow 1.2s ease-in-out infinite, float 2.5s ease-in-out infinite, elementAppear 1s ease-out forwards !important;
-        top: 8% !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-    }
-    
-    .hidden-element.visible:hover {
-        font-size: 100px !important;
-        opacity: 1 !important;
-    }
-    
-    .hidden-element.visible::after {
-        width: 300px !important;
-        height: 300px !important;
-    }
-    
-    .hidden-element.visible::before {
-        font-size: 17px !important;
-        top: -75px !important;
-        padding: 12px 18px !important;
-        white-space: nowrap;
-        font-weight: 700;
-        z-index: 51 !important;
-        background: rgba(255, 255, 255, 0.25) !important;
-        backdrop-filter: blur(12px) !important;
-        border-radius: 22px !important;
-        border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+        margin-bottom: 20px;
     }
     
     .pattern-btn {
         width: 55px;
         height: 55px;
         font-size: 26px;
+    }
+    
+    .pattern-item {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
     }
     
     .memory-grid {
@@ -2502,54 +1061,90 @@ body.quest-search-mode * {
         padding: 12px;
     }
     
-    .achievement-content {
-        min-width: 85%;
-        padding: 22px 18px;
+    .quest-title {
+        font-size: 21px;
+        margin-bottom: 6px;
     }
     
-    .achievement-text {
-        font-size: 17px;
-        line-height: 1.4;
+    .quest-subtitle {
+        font-size: 13px;
     }
     
-    .message-container {
-        padding: 10px;
-        max-width: 95%;
+    .quest-step {
+        padding: 12px 13px;
+        margin-bottom: 9px;
     }
     
-    .message-card {
-        padding: 22px 18px;
-        border-radius: 18px;
+    .quest-step-icon {
+        font-size: 20px;
+        margin-right: 10px;
+        min-width: 28px;
     }
     
-    .message-main {
-        font-size: 24px;
-        line-height: 1.4;
+    .quest-step.active .quest-step-icon {
+        transform: scale(1.15);
     }
     
-    .message-additional {
+    .quest-step-main-text {
         font-size: 16px;
-        line-height: 1.5;
-        margin-top: 18px;
     }
     
-    .message-signature {
-        font-size: 14px;
-        margin-top: 20px;
-        padding-top: 15px;
-        line-height: 1.5;
+    .quest-step-hint {
+        font-size: 12px;
+    }
+    
+    .hidden-element {
+        font-size: 40px;
+        top: 1%;
+    }
+    
+    .hidden-element.visible {
+        opacity: 0.2;
+        font-size: 90px;
+    }
+    
+    .hidden-element.visible::after {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .hidden-element.visible::before {
+        font-size: 17px;
+        top: -75px;
+        padding: 10px 18px;
     }
 }
 
-/* Extra Small Devices (phones, 480px and down) */
-@media (max-width: 480px) {
+/* Medium Mobile (480px and below) */
+@media screen and (max-width: 480px) {
+    .video-quest-button {
+        bottom: 8%;
+    }
+    
+    .quest-container {
+        width: 92%;
+        max-width: 92%;
+    }
+}
+
+/* Tablet (768px and below) */
+@media screen and (max-width: 768px) {
+    .message-main {
+        font-size: 22px;
+    }
+    .message-additional {
+        font-size: 16px;
+    }
+    .message-signature {
+        font-size: 12px;
+    }
     .sound-button {
-        top: 8px;
-        right: 8px;
+        top: 10px;
+        right: 10px;
     }
     
     .sound-button-content {
-        padding: 8px 12px;
+        padding: 4px 5px;
         gap: 6px;
     }
     
@@ -2561,256 +1156,31 @@ body.quest-search-mode * {
         font-size: 12px;
     }
     
-    .quest-button-content {
-        padding: 15px 25px;
-        gap: 12px;
-        border-radius: 40px;
-    }
-    
-    .quest-button-icon {
-        font-size: 28px;
-    }
-    
-    .quest-button-text {
-        font-size: 18px;
-        letter-spacing: 0.5px;
-    }
-    
     .video-quest-button {
-        bottom: 6%;
+        bottom: 17%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 50;
+        position: fixed;
+        pointer-events: all;
+        touch-action: manipulation;
     }
     
     .quest-container {
-        padding: 5px;
-        width: 100%;
-        max-width: 100%;
-        left: 0;
-        right: 0;
-        transform: translateY(-50%) scale(0.8);
-    }
-    
-    .quest-container.visible {
-        transform: translateY(-50%) scale(1);
+        width: 92%;
+        max-width: 92%;
     }
     
     .quest-card {
-        min-width: 0;
-        max-width: 100%;
-        width: 100%;
-        padding: 25px 15px;
-        border-radius: 18px;
-        margin: 0 auto;
-        box-sizing: border-box;
-    }
-    
-    .quest-minigame {
-        width: 100%;
-        max-width: 100%;
-        padding: 5px;
-        box-sizing: border-box;
-        left: 0;
-        right: 0;
-        transform: translateY(-50%) scale(0.8);
-    }
-    
-    .quest-minigame.visible {
-        transform: translateY(-50%) scale(1);
-    }
-    
-    .minigame-card {
-        min-width: 0;
-        max-width: 100%;
-        width: 100%;
-        padding: 20px 15px;
-        box-sizing: border-box;
+        padding: 30px 25px;
+        max-height: 80vh;
     }
     
     .quest-title {
-        font-size: 22px;
-        letter-spacing: 1px;
+        font-size: 26px;
     }
     
     .quest-subtitle {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-    
-    .quest-step {
-        padding: 12px 14px;
-        margin-bottom: 10px;
-    }
-    
-    .quest-step-text {
-        font-size: 14px;
-    }
-    
-    .quest-step-main-text {
-        font-size: 13px;
-    }
-    
-    .quest-step-hint {
-        font-size: 11px;
-    }
-    
-    .quest-progress-text {
-        font-size: 14px;
-        min-width: 35px;
-    }
-    
-    .content-container {
-        padding: 0 5px;
-    }
-    
-    .message-container {
-        padding: 10px;
-        max-width: 98%;
-    }
-    
-    .message-card {
-        padding: 25px 18px;
-        border-radius: 18px;
-    }
-    
-    .message-main {
-        font-size: 22px;
-        line-height: 1.3;
-    }
-    
-    .message-additional {
         font-size: 15px;
-        line-height: 1.4;
-        margin-top: 15px;
-    }
-    
-    .message-signature {
-        font-size: 13px;
-        margin-top: 20px;
-        padding-top: 15px;
-    }
-    
-    .pattern-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
-    }
-    
-    .memory-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-    }
-    
-    .memory-card {
-        font-size: 20px;
-    }
-    
-    .counting-display {
-        min-height: 120px;
-        padding: 15px;
-        gap: 10px;
-    }
-    
-    .counting-star {
-        font-size: 24px;
-    }
-    
-    .counting-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 20px;
-    }
-    
-    .counting-result {
-        font-size: 16px;
-        padding: 10px;
-    }
-    
-    .achievement-content {
-        min-width: 85%;
-        padding: 20px 15px;
-    }
-    
-    .achievement-text {
-        font-size: 16px;
-    }
-    
-    /* Only apply these if not already set by 430px media query */
-    .hidden-element {
-        font-size: 55px !important;
-    }
-    
-    .hidden-element.visible {
-        font-size: 75px !important;
-        opacity: 1 !important;
-        filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) drop-shadow(0 0 50px rgba(255, 215, 0, 1)) drop-shadow(0 0 80px rgba(255, 215, 0, 0.9)) drop-shadow(0 0 100px rgba(255, 215, 0, 0.7)) !important;
-        z-index: 30 !important;
-        animation: pulseGlow 1s ease-in-out infinite, float 2s ease-in-out infinite, elementAppear 1s ease-out forwards !important;
-    }
-    
-    .hidden-element.visible:hover {
-        font-size: 85px !important;
-    }
-    
-    .hidden-element.visible::after {
-        width: 250px !important;
-        height: 250px !important;
-    }
-    
-    .hidden-element.visible::before {
-        font-size: 20px !important;
-        top: -70px !important;
-        padding: 10px 18px !important;
     }
 }
-
-/* Landscape Mobile Devices */
-@media (max-width: 768px) and (orientation: landscape) {
-    .video-quest-button {
-        bottom: 5%;
-    }
-    
-    .quest-card {
-        max-height: 85vh;
-        padding: 25px 20px;
-    }
-    
-    .quest-title {
-        font-size: 22px;
-        margin-bottom: 8px;
-    }
-    
-    .quest-subtitle {
-        font-size: 13px;
-        margin-bottom: 15px;
-    }
-    
-    .quest-step {
-        padding: 10px 14px;
-        margin-bottom: 8px;
-    }
-    
-    .quest-step-text {
-        font-size: 13px;
-    }
-}
-
-/* Touch Device Optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .sound-button-content,
-    .quest-button-content {
-        cursor: pointer;
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.3);
-    }
-    
-    .quest-step {
-        cursor: pointer;
-        -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .pattern-btn,
-    .memory-card,
-    .counting-btn {
-        cursor: pointer;
-        -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
-    }
-}
-
