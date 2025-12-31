@@ -5,6 +5,10 @@ const CONGRATULATION_MESSAGE = "Շնորհավոր Նոր Տարի 🎄\n\nԹո�
 // Leave empty string "" if you don't want additional text
 const ADDITIONAL_MESSAGE = "Թող ամեն ցանկությունդ իրականանա, ամեն երազանքդ կատարվի, և ամեն օրը բերի քեզ նոր պատճառներ ժպտալու և երջանիկ լինելու համար 🌟\n\nԹող այս տարին լինի քո համար հատուկ, լի գեղեցիկ պահերով և անմոռանալի արկածներով 💫";
 
+// TODO: Change the important message text here (appears after additional message)
+// Leave empty string "" if you don't want this message
+const IMPORTANT_MESSAGE = "Այս ամենը փորձ էր մի փոքր ուշադրություն գրավելու և օրը ավելի գեղեցիկ դարձնելու համար «հուսով եմ ստացվելա» 😏՝ մի անծանոթի կողմից, ով այս տարի էլ անծանոթ չի մնա։\n\nՈրոշեցի, որ Նոր Տարին այլևս չենք սկսի անծանոթ կերպարներով, որովհետև Նոր Տարին նոր ծանոթությունով սկսելն, կարծում եմ, հետաքրքիր կլինի։\n\nՈւստի մաղթում եմ քեզ այս տարում միայն այնպիսի ծանոթություններ, որոնք կլինեն հետաքրքիր, դրական և, ամենակարևորը, նպատակային։";
+
 // TODO: Change the signature/closing text here (appears last)
 // Leave empty string "" if you don't want a signature
 const SIGNATURE_MESSAGE = "Մաղթում եմ քեզ ամենայն բարիք\n\nԹող 2026-ը լինի քո ամենագեղեցիկ տարին ✨";
@@ -21,7 +25,7 @@ const QUEST_STEPS = [
         type: "pattern", 
         icon: "✨", 
         text: "Գտիր ճիշտ հաջորդականությունը", 
-        hint: "Կտտացրու աստղերին ճիշտ հերթականությամբ" 
+        hint: "Ներքևում կտեսնես ճիշտ հերթականությունը, ապա կտտացրու նույն հերթականությամբ" 
     },
     { 
         type: "memory", 
@@ -44,6 +48,11 @@ const ACHIEVEMENT_MESSAGES = [
     "Դու անհավատալի ես! Շատ լավ արեցիր 🎁",
     "Կատարյալ! Դու ավարտեցիր բոլոր մարտահրավերները 🎄"
 ];
+
+// Configuration: Skip quest system and show message directly
+// Set to true to skip quests and show message on button click
+// Set to false to use the normal quest system
+const SKIP_QUESTS = false;
 
 // Telegram Configuration
 // TODO: Replace with your serverless function URL (e.g., from Vercel, Netlify, etc.)
@@ -86,11 +95,29 @@ let telegramTracking = {
 document.addEventListener('DOMContentLoaded', () => {
     initVideo();
     initSoundButton();
-    initVideoQuestButton();
     initSnow();
     initPageUnloadTracking();
     trackMessageOpen();
     sendTelegramNotification('page_load');
+    
+    // Check if quests are already completed (from sessionStorage)
+    const questsCompleted = sessionStorage.getItem('questsCompleted');
+    
+    if (questsCompleted === 'true') {
+        // Quests already completed - hide quest button and show message directly
+        const questButton = document.getElementById('videoQuestButton');
+        if (questButton) {
+            questButton.style.display = 'none';
+        }
+        
+        // Show message directly after a short delay
+        setTimeout(() => {
+            showMessageDirectly();
+        }, 1000);
+    } else {
+        // Quests not completed - show quest button normally
+        initVideoQuestButton();
+    }
 });
 
 // Track scroll in message container
@@ -460,31 +487,23 @@ function initVideoQuestButton() {
         questButton.style.pointerEvents = 'none';
         questButton.style.transform = 'translateX(-50%) scale(0.8)';
         
-        // Also enable sound when quest button is clicked
-        // const video = document.getElementById('backgroundVideo');
-        // if (video && video.muted) {
-        //     try {
-        //         // Ensure video is playing before unmuting (mobile requirement)
-        //         if (video.paused) {
-        //             await video.play();
-        //         }
-        //         video.muted = false;
-        //         if (video.paused) {
-        //             await video.play();
-        //         }
-        //         console.log('Sound enabled via quest button');
-        //     } catch (error) {
-        //         console.log('Quest button sound enable error:', error);
-        //     }
-        // }
-        
-        // Create particle effect before showing quest
-        createQuestParticles();
-        
-        // Open quest system
-        setTimeout(() => {
-            initQuestSystem();
-        }, 300);
+        // Check if we should skip quests
+        if (SKIP_QUESTS) {
+            // Skip quest system and show message directly
+            createQuestParticles();
+            setTimeout(() => {
+                showMessageDirectly();
+            }, 300);
+        } else {
+            // Normal quest flow
+            // Create particle effect before showing quest
+            createQuestParticles();
+            
+            // Open quest system
+            setTimeout(() => {
+                initQuestSystem();
+            }, 300);
+        }
     });
     
     // Also handle touch events for mobile
@@ -499,30 +518,23 @@ function initVideoQuestButton() {
         questButton.style.pointerEvents = 'none';
         questButton.style.transform = 'translateX(-50%) scale(0.8)';
         
-        // Also enable sound when quest button is clicked
-        // const video = document.getElementById('backgroundVideo');
-        // if (video && video.muted) {
-        //     try {
-        //         if (video.paused) {
-        //             await video.play();
-        //         }
-        //         video.muted = false;
-        //         if (video.paused) {
-        //             await video.play();
-        //         }
-        //         console.log('Sound enabled via quest button (touch)');
-        //     } catch (error) {
-        //         console.log('Quest button sound enable error (touch):', error);
-        //     }
-        // }
-        
-        // Create particle effect before showing quest
-        createQuestParticles();
-        
-        // Open quest system
-        setTimeout(() => {
-            initQuestSystem();
-        }, 300);
+        // Check if we should skip quests
+        if (SKIP_QUESTS) {
+            // Skip quest system and show message directly
+            createQuestParticles();
+            setTimeout(() => {
+                showMessageDirectly();
+            }, 300);
+        } else {
+            // Normal quest flow
+            // Create particle effect before showing quest
+            createQuestParticles();
+            
+            // Open quest system
+            setTimeout(() => {
+                initQuestSystem();
+            }, 300);
+        }
     });
 }
 
@@ -849,10 +861,35 @@ function showAchievement(message) {
     }
 }
 
+// Show message directly (skip quest system)
+function showMessageDirectly() {
+    const questContainer = document.getElementById('questContainer');
+    const messageContainer = document.getElementById('messageContainer');
+    
+    // Hide quest container if visible
+    if (questContainer) {
+        questContainer.classList.remove('visible');
+    }
+    
+    // Show confetti
+    createConfetti();
+    
+    // Show message container
+    setTimeout(() => {
+        if (messageContainer) {
+            messageContainer.classList.add('visible');
+            startTypewriterEffect();
+        }
+    }, 500);
+}
+
 // Complete quest and show final message
 function completeQuest() {
     // Send Telegram notification for all quests completed
     sendTelegramNotification('all_quests_completed');
+    
+    // Save quest completion to sessionStorage (persists across refreshes, clears on tab close)
+    sessionStorage.setItem('questsCompleted', 'true');
     
     const questContainer = document.getElementById('questContainer');
     const messageContainer = document.getElementById('messageContainer');
@@ -955,6 +992,7 @@ function createConfetti() {
 function startTypewriterEffect() {
     const messageMain = document.getElementById('messageMain');
     const messageAdditional = document.getElementById('messageAdditional');
+    const messageImportant = document.getElementById('messageImportant');
     const messageSignature = document.getElementById('messageSignature');
     const messageContainer = document.getElementById('messageContainer');
     
@@ -984,6 +1022,82 @@ function startTypewriterEffect() {
                 typeText(messageAdditional, ADDITIONAL_MESSAGE, () => {
                     messageAdditional.classList.add('complete');
                     
+                    // Scroll to show important message area
+                    if (messageContainer) {
+                        setTimeout(() => {
+                            messageContainer.scrollTo({
+                                top: messageContainer.scrollHeight,
+                                behavior: 'smooth'
+                            });
+                        }, 100);
+                    }
+                    
+                    // After additional message, show important message if provided
+                    if (IMPORTANT_MESSAGE && IMPORTANT_MESSAGE.trim() !== '') {
+                        setTimeout(() => {
+                            messageImportant.classList.add('visible');
+                            typeText(messageImportant, IMPORTANT_MESSAGE, () => {
+                                messageImportant.classList.add('complete');
+                                
+                                // Scroll to show signature area
+                                if (messageContainer) {
+                                    setTimeout(() => {
+                                        messageContainer.scrollTo({
+                                            top: messageContainer.scrollHeight,
+                                            behavior: 'smooth'
+                                        });
+                                    }, 100);
+                                }
+                                
+                                // After important message, show signature if provided
+                                if (SIGNATURE_MESSAGE && SIGNATURE_MESSAGE.trim() !== '') {
+                                    setTimeout(() => {
+                                        messageSignature.classList.add('visible');
+                                        typeText(messageSignature, SIGNATURE_MESSAGE, () => {
+                                            messageSignature.classList.add('complete');
+                                            
+                                            // Final scroll to bottom
+                                            if (messageContainer) {
+                                                setTimeout(() => {
+                                                    messageContainer.scrollTo({
+                                                        top: messageContainer.scrollHeight,
+                                                        behavior: 'smooth'
+                                                    });
+                                                }, 100);
+                                            }
+                                        });
+                                    }, 500);
+                                }
+                            });
+                        }, 800);
+                    } else if (SIGNATURE_MESSAGE && SIGNATURE_MESSAGE.trim() !== '') {
+                        // If no important message, go straight to signature
+                        setTimeout(() => {
+                            messageSignature.classList.add('visible');
+                            typeText(messageSignature, SIGNATURE_MESSAGE, () => {
+                                messageSignature.classList.add('complete');
+                                
+                                // Final scroll to bottom
+                                if (messageContainer) {
+                                    setTimeout(() => {
+                                        messageContainer.scrollTo({
+                                            top: messageContainer.scrollHeight,
+                                            behavior: 'smooth'
+                                        });
+                                    }, 100);
+                                }
+                            });
+                        }, 500);
+                    }
+                });
+            }, 800);
+        } else if (IMPORTANT_MESSAGE && IMPORTANT_MESSAGE.trim() !== '') {
+            // If no additional message, show important message
+            setTimeout(() => {
+                messageImportant.classList.add('visible');
+                typeText(messageImportant, IMPORTANT_MESSAGE, () => {
+                    messageImportant.classList.add('complete');
+                    
                     // Scroll to show signature area
                     if (messageContainer) {
                         setTimeout(() => {
@@ -994,7 +1108,7 @@ function startTypewriterEffect() {
                         }, 100);
                     }
                     
-                    // After additional message, show signature if provided
+                    // After important message, show signature if provided
                     if (SIGNATURE_MESSAGE && SIGNATURE_MESSAGE.trim() !== '') {
                         setTimeout(() => {
                             messageSignature.classList.add('visible');
@@ -1016,7 +1130,7 @@ function startTypewriterEffect() {
                 });
             }, 800);
         } else if (SIGNATURE_MESSAGE && SIGNATURE_MESSAGE.trim() !== '') {
-            // If no additional message, go straight to signature
+            // If no additional or important message, go straight to signature
             setTimeout(() => {
                 messageSignature.classList.add('visible');
                 typeText(messageSignature, SIGNATURE_MESSAGE, () => {

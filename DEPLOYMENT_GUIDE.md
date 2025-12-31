@@ -47,6 +47,7 @@ git push -u origin main
 6. Wait 1-2 minutes
 7. Your site will be live at: `https://YOUR_USERNAME.github.io/NewYearTemplate/`
 
+---
 
 ## 🌐 Adding Custom Domain (e.g., asd.com)
 
